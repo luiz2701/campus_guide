@@ -78,11 +78,11 @@ Já com o projeto aberto, no terminal rode o comando `flutter doctor`
 
 Possíveis erros: 
 
-**Android license status unknown**, para corrigir, rode o comando `flutter doctor --android-licenses`, **y -> Enter** até acabar
+`Android license status unknown`, para corrigir, rode o comando `flutter doctor --android-licenses`, **y -> Enter** até acabar
 
-**Visual Studio not installed; this is necessary to develop Windows apps.**, para corrigir, acesse o site **https://visualstudio.microsoft.com/pt-br/downloads/** e instale a versão community
+`Visual Studio not installed; this is necessary to develop Windows apps.`, para corrigir, acesse o site **https://visualstudio.microsoft.com/pt-br/downloads/** e instale a versão community
 
-**The current Visual Studio installation is incomplete**, para corrigir, acesse seu **Visual Studio Installer** e clique em **modificar**
+`The current Visual Studio installation is incomplete`, para corrigir, acesse seu **Visual Studio Installer** e clique em **modificar**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/63ad484655598070889fecf3bdcd8feaca646a40/screenshots/Captura%20de%20tela%202026-05-05%20110516.png)
 Em **Cargas de trabalho**, selecione **Desenvolvimento para desktop com C++** e **SDK do Windows 11**. CLique em **Instalar**
