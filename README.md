@@ -26,8 +26,12 @@ Clique em next
 
 Accept e next
 
-![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080424.png)
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20075646.png)
 
 Finish
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080424.png)
+
+
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20
