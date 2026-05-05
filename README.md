@@ -1,6 +1,14 @@
 # Guia de setup de ambiente de desenvolvimento - Campus Guide
 
-Atenção! - Esse guia assume que você ja tem **Git**, **Visual Studio Code**, e **Chrome** instalado em seu computador, se você não possui qualquer um desses em sua máquina, é nescessário com você instale-os primeiro antes de prosseguir.
+## ⚠️ Pré-requisitos
+
+Este guia assume que você já possui instalado:
+
+- Git  
+- Visual Studio Code
+- Google Chrome  
+
+Caso não tenha algum deles, instale antes de continuar.
 
 É recomendado que você verifique todo o conteúdo do guia antes de começar
 
@@ -8,7 +16,7 @@ Atenção! - Esse guia assume que você ja tem **Git**, **Visual Studio Code**, 
 
 Acesse o site https://developer.android.com/studio?hl=pt-br
 
-Clique em **Baixar o Android Studio Panda 4**
+Clique em **Baixar o Android Studio**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/20264dcd68d7457ccd74003ca38da35fc8ba7f19/screenshots/Captura%20de%20tela%202026-05-05%20074512.png)
 
@@ -94,7 +102,7 @@ Em **Cargas de trabalho**, selecione **Desenvolvimento para desktop com C++** e 
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20085542.png)
 
-Após finalizado, volte no vs code e novamente rode `flutter doctor`, se todos os problemas estiverem corrigidos, rode o projeto com **F5**
+Após finalizado, volte no vs code e novamente rode `flutter doctor`, se todos os problemas estiverem corrigidos, rode o projeto com `flutter run`, escolha o **Chrome** para emulador.
 
 ## ⚠️ Observações
 
