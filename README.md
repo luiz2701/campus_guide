@@ -1,5 +1,9 @@
 # Guia de setup de ambiente de desenvolvimento - Campus Guide
 
+## ⚠️ Observações
+
+Pode ser que ao abrir o projeto, seu vs code ja alerte que não há um Flutter SDK instalado, se isso ocorrer você pode seguir com a instalação do SDK normalmente, mas lembre-se que ainda é necessário instalar a extensão Flutter
+
 ## Passo 1 - Instalar Android Studio
 
 Acesse o site https://developer.android.com/studio?hl=pt-br
@@ -14,7 +18,7 @@ Aceite os termos e clique para fazer o download
 
 Após terminado o download, abra o instalador
 
-Clique em next 
+Clique em **next** 
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20075458.png)
 
@@ -85,12 +89,9 @@ Possíveis erros:
 `The current Visual Studio installation is incomplete`, para corrigir, acesse seu **Visual Studio Installer** e clique em **modificar**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/63ad484655598070889fecf3bdcd8feaca646a40/screenshots/Captura%20de%20tela%202026-05-05%20110516.png)
-Em **Cargas de trabalho**, selecione **Desenvolvimento para desktop com C++** e **SDK do Windows 11**. CLique em **Instalar**
+
+Em **Cargas de trabalho**, selecione **Desenvolvimento para desktop com C++** e **SDK do Windows 11**. CLique em **Instalar**. **Não** selecione a opção **Desenvolvimento móvel com C++**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20085542.png)
 
 Após finalizado, volte no vs code e novamente rode `flutter doctor`, se todos os problemas estiverem corrigidos, rode o projeto com **F5**
-
-## Observações
-
-Pode ser que ao abrir o projeto, seu vs code ja alerte que não há um Flutter SDK instalado, se isso ocorrer você pode seguir com a instalação do SDK normalmente, mas lembre-se que ainda é necessário instalar a extensão
