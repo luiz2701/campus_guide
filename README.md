@@ -32,6 +32,12 @@ Finish
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080424.png)
 
+Com o Android Studio aberto, clique em More Actions -> SDK Manager
 
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080502.png)
 
-![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20
+Clique em SDK Tools
+
+Garanta que os pacotes **Android SDK Build-Tools**, **Android SDK Command-line Tools (latest)**, e **Android SDK Plataform-Tools** estão instalados, se algum desses pacotes não estiver instalado selecione-o e clique em **apply** para começar a instalação
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080642.png)
