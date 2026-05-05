@@ -82,4 +82,12 @@ Possíveis erros:
 
 **Visual Studio not installed; this is necessary to develop Windows apps.**, para corrigir, acesse o site **https://visualstudio.microsoft.com/pt-br/downloads/** e instale a versão community
 
-**The current Visual Studio installation is incomplete, para corrigir, acesse seu **Visual Studio Installer** e clique em **modificar**
+**The current Visual Studio installation is incomplete**, para corrigir, acesse seu **Visual Studio Installer** e clique em **modificar**
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20110516.png)
+
+Em **Cargas de trabalho**, selecione **Desenvolvimento para desktop com C++** e **SDK do Windows 11**. CLique em **Instalar**
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20085542.png)
+
+Após finalizado, volte no vs code e novamente rode 'flutter doctor', se todos os problemas estiverem corrigidos, rode o projeto com **F5**
