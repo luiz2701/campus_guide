@@ -1,5 +1,7 @@
 # Guia de setup de ambiente de desenvolvimento - Campus Guide
 
+Esse guia assume que você ja tem **Git**, **Visual Studio Code**, e **Chrome** instalado em seu computador
+
 ## Passo 1 - Instalar Android Studio
 
 Acesse o site https://developer.android.com/studio?hl=pt-br
