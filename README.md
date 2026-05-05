@@ -56,7 +56,7 @@ Após instalado, use as teclas **Ctrl+Shift+P** para abrir a **Paleta de comando
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20082710.png)
 
-Digite **FLutter** e clique em **New Project**
+Digite **Flutter** e clique em **New Project**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20082802.png)
 
@@ -64,7 +64,7 @@ O vs code vai abrir um pop up dizendo que não foi possível localizar um Flutte
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20082829.png)
 
-Escolha onde você quer instalar o FLutter, recomendo a pasta **/C:**
+Escolha onde você quer instalar o Flutter, recomendo a pasta **/C:**
 
 Clique em Clone Flutter
 
@@ -73,3 +73,13 @@ Assim que a instalação terminar, o vs code vai abrir outro pop up, perguntando
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20084022.png)
 
 ## Passo 3 - Corrijindo possíveis erros
+
+Já com o projeto aberto, no terminal rode o comando 'flutter doctor'
+
+Possíveis erros: 
+
+**Android license status unknown**, para corrigir, rode o comando 'flutter doctor --android-licenses', **y -> Enter** até acabar
+
+**Visual Studio not installed; this is necessary to develop Windows apps.**, para corrigir, acesse o site **https://visualstudio.microsoft.com/pt-br/downloads/** e instale a versão community
+
+**The current Visual Studio installation is incomplete, para corrigir, acesse seu **Visual Studio Installer** e clique em **modificar**
