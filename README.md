@@ -84,8 +84,7 @@ Possíveis erros:
 
 **The current Visual Studio installation is incomplete**, para corrigir, acesse seu **Visual Studio Installer** e clique em **modificar**
 
-![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20110516.png)
-
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/63ad484655598070889fecf3bdcd8feaca646a40/screenshots/Captura%20de%20tela%202026-05-05%20110516.png)
 Em **Cargas de trabalho**, selecione **Desenvolvimento para desktop com C++** e **SDK do Windows 11**. CLique em **Instalar**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20085542.png)
