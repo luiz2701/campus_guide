@@ -24,20 +24,52 @@ Clique em next
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20075554.png)
 
-Accept e next
+**Accept** e **next**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20075646.png)
 
-Finish
+**Finish**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080424.png)
 
-Com o Android Studio aberto, clique em More Actions -> SDK Manager
+Com o Android Studio aberto, clique em **More Actions** -> **SDK Manager**
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080502.png)
 
-Clique em SDK Tools
+Clique em **SDK Tools**
 
 Garanta que os pacotes **Android SDK Build-Tools**, **Android SDK Command-line Tools (latest)**, e **Android SDK Plataform-Tools** estão instalados, se algum desses pacotes não estiver instalado selecione-o e clique em **apply** para começar a instalação
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20080642.png)
+
+## Passo 2 - Instalar o Flutter
+
+Abra o seu **Visual Studio Code**
+
+Em **extensões** pesquise por **Flutter**
+
+Clique em **Instalar**
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20082450.png)
+
+Após instalado, use as teclas **Ctrl+Shift+P** para abrir a **Paleta de comandos**, alternativamente, você pode acessar a paleta clicando em **Exibir**
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20082710.png)
+
+Digite **FLutter** e clique em **New Project**
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20082802.png)
+
+O vs code vai abrir um pop up dizendo que não foi possível localizar um Flutter SDK, clique em **Download SDK**
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20082829.png)
+
+Escolha onde você quer instalar o FLutter, recomendo a pasta **/C:**
+
+Clique em Clone Flutter
+
+Assim que a instalação terminar, o vs code vai abrir outro pop up, perguntando se você quer adicionar o **Flutter** ao **PATH**, clique em **Add SDK to PATH**
+
+![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20084022.png)
+
+## Passo 3 - Corrijindo possíveis erros
