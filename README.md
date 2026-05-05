@@ -74,11 +74,11 @@ Assim que a instalação terminar, o vs code vai abrir outro pop up, perguntando
 
 ## Passo 3 - Corrijindo possíveis erros
 
-Já com o projeto aberto, no terminal rode o comando 'flutter doctor'
+Já com o projeto aberto, no terminal rode o comando `flutter doctor`
 
 Possíveis erros: 
 
-**Android license status unknown**, para corrigir, rode o comando 'flutter doctor --android-licenses', **y -> Enter** até acabar
+**Android license status unknown**, para corrigir, rode o comando `flutter doctor --android-licenses`, **y -> Enter** até acabar
 
 **Visual Studio not installed; this is necessary to develop Windows apps.**, para corrigir, acesse o site **https://visualstudio.microsoft.com/pt-br/downloads/** e instale a versão community
 
@@ -89,4 +89,4 @@ Em **Cargas de trabalho**, selecione **Desenvolvimento para desktop com C++** e 
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20085542.png)
 
-Após finalizado, volte no vs code e novamente rode 'flutter doctor', se todos os problemas estiverem corrigidos, rode o projeto com **F5**
+Após finalizado, volte no vs code e novamente rode `flutter doctor`, se todos os problemas estiverem corrigidos, rode o projeto com **F5**
