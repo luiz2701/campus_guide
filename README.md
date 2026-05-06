@@ -130,7 +130,7 @@ Sprint 2 - (13/05 - 27/05)
 
 - Kauã - Back -
  
-- Luís Gustavo - Back
+- Luís Gustavo - Back - Tela de Login
  
 - 3
  
