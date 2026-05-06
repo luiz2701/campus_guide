@@ -134,7 +134,7 @@ Sprint 2 - (13/05 - 27/05)
  
 - José Alves - Front
  
-- Luiz Armando - Front
+- Luiz Armando - Front- integração com backend
   
 - Davi Reis - Front
 
