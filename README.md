@@ -118,7 +118,7 @@ Sprint 1 - (06/05 - 13/05)
 
 - Luís Gustavo - Back
 
-- José Alves - Front-  tela de login 
+- José Alves - Front-  tela de autenticação
 
 - Luiz Armando - Front- Tela de Eventos
 
@@ -132,7 +132,7 @@ Sprint 2 - (13/05 - 27/05)
  
 - Luís Gustavo - Back - Tela de Login
  
-- José Alves - Front
+- José Alves - Front - integração com o back
  
 - Luiz Armando - Front- integração com backend
   
@@ -146,7 +146,7 @@ Sprint 3 - (27/05 - 03/06)
 
 - Luís Gustavo - Back
 
-- José Alves - Front
+- José Alves - Front - testes finais
 
 - Luiz Armando - Front
 
