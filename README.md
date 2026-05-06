@@ -132,9 +132,9 @@ Sprint 2 - (13/05 - 27/05)
  
 - Luís Gustavo - Back - Tela de Login
  
-- 3
+- José Alves - Front
  
-- 4
+- Luiz Armando - Front- Tela de ADM
  
 - Davi Reis - Front
 
@@ -146,9 +146,9 @@ Sprint 3 - (27/05 - 03/06)
 
 - Luís Gustavo - Back
 
-- 3
+- José Alves - Front
 
-- 4
+- Luiz Armando - Front
 
 - Davi Reis - Front
 
