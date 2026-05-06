@@ -84,7 +84,7 @@ Assim que a instalação terminar, o vs code vai abrir outro pop up, perguntando
 
 ![image alt](https://github.com/KauaaRodrigo/campus_guide/blob/84721f013d1e487d5e8ca14ae1fff96743451bec/screenshots/Captura%20de%20tela%202026-05-05%20084022.png)
 
-## Passo 3 - Corrijindo possíveis erros
+## Passo 3 - Corrigindo possíveis erros
 
 Já com o projeto aberto, no terminal rode o comando `flutter doctor`
 
@@ -106,4 +106,4 @@ Após finalizado, volte no vs code e novamente rode `flutter doctor`, se todos o
 
 ## ⚠️ Observações
 
-Pode ser que ao abrir o projeto, seu vs code ja alerte que não há um Flutter SDK instalado, se isso ocorrer você pode seguir com a instalação do SDK normalmente, mas lembre-se que ainda é necessário instalar a extensão Flutter
+Pode ser que ao abrir o projeto, seu vs code alerte que não há um Flutter SDK instalado, se isso ocorrer você pode seguir com a instalação do SDK normalmente, mas lembre-se que ainda é necessário instalar a extensão Flutter
