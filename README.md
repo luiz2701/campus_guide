@@ -124,7 +124,7 @@ Sprint 1 - (06/05 - 13/05)
 
 - Davi Reis - Front - Criação dos componentes da interface
 
-- 6
+- João Pedro S. Caetano - Back - Cadastro de Eventos Admin 
 
 Sprint 2 - (13/05 - 27/05)
 
@@ -138,7 +138,7 @@ Sprint 2 - (13/05 - 27/05)
  
 - Davi Reis - Front
 
-- 6
+- João Pedro S. Caetano - Back - Editar Eventos Admin
 
 Sprint 3 - (27/05 - 03/06)
 
@@ -152,4 +152,4 @@ Sprint 3 - (27/05 - 03/06)
 
 - Davi Reis - Front
 
-- 6
+- João Pedro S. Caetano - Back - 
