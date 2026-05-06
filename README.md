@@ -148,7 +148,7 @@ Sprint 3 - (27/05 - 03/06)
 
 - José Alves - Front - testes finais
 
-- Luiz Armando - Front
+- Luiz Armando - Front - Verificação de Erros
 
 - Davi Reis - Front - Refinamento de UI
 
