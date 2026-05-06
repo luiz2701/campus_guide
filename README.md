@@ -118,7 +118,7 @@ Sprint 1 - (06/05 - 13/05)
 
 - Luís Gustavo - Back
 
-- 3
+- José Alves - tela de login
 
 - 4
 
