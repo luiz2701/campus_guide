@@ -136,7 +136,7 @@ Sprint 2 - (13/05 - 27/05)
  
 - Luiz Armando - Front- integração com backend
   
-- Davi Reis - Front
+- Davi Reis - Front - Refinamento de UI
 
 - João Pedro S. Caetano - Back - Editar Eventos Admin
 
@@ -150,6 +150,6 @@ Sprint 3 - (27/05 - 03/06)
 
 - Luiz Armando - Front
 
-- Davi Reis - Front
+- Davi Reis - Front - Criar tela de perfil
 
 - João Pedro S. Caetano - Back - Lista de Inscritos
