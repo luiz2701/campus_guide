@@ -142,7 +142,7 @@ Sprint 2 - (13/05 - 27/05)
 
 Sprint 3 - (27/05 - 03/06)
 
-- Kauã - Back -
+- Kauã - Back - debug
 
 - Luís Gustavo - Back
 
