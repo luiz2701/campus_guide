@@ -112,6 +112,44 @@ Pode ser que ao abrir o projeto, seu vs code alerte que não há um Flutter SDK 
 
 ## Divisão de Tarefas
 
-Sprint 1
+Sprint 1 - (06/05 - 13/05)
 
-Kauã - Back - Criação do banco de dados
+- Kauã - Back - Criação do banco de dados
+
+- 2
+
+- 3
+
+- 4
+
+- 5
+
+- 6
+
+Sprint 2 - (13/05 - 27/05)
+
+- Kauã - Back -
+ 
+- 2
+ 
+- 3
+ 
+- 4
+ 
+- 5
+
+- 6
+
+Sprint 3 - (27/05 - 03/06)
+
+- Kauã - Back -
+
+- 2
+
+- 3
+
+- 4
+
+- 5
+
+- 6
