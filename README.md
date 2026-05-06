@@ -152,4 +152,4 @@ Sprint 3 - (27/05 - 03/06)
 
 - Davi Reis - Front
 
-- João Pedro S. Caetano - Back - 
+- João Pedro S. Caetano - Back - Lista de Inscritos
