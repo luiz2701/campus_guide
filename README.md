@@ -114,7 +114,7 @@ Pode ser que ao abrir o projeto, seu vs code alerte que não há um Flutter SDK 
 
 Sprint 1 - (06/05 - 13/05)
 
-- Kauã - Back - Criação do banco de dados
+- Kauã - Back - Criação do banco de dados + começar autenticação login/cadastro
 
 - Luís Gustavo - Back
 
@@ -128,7 +128,7 @@ Sprint 1 - (06/05 - 13/05)
 
 Sprint 2 - (13/05 - 27/05)
 
-- Kauã - Back -
+- Kauã - Back - terminar auth login/cadastro
  
 - Luís Gustavo - Back - Tela de Login
  
