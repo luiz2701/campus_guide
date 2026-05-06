@@ -120,7 +120,7 @@ Sprint 1 - (06/05 - 13/05)
 
 - José Alves - Front-  tela de login 
 
-- Luiz Armando - Front- Tela de ADM
+- Luiz Armando - Front- Tela de Eventos
 
 - Davi Reis - Front - Criação dos componentes da interface
 
@@ -134,8 +134,8 @@ Sprint 2 - (13/05 - 27/05)
  
 - José Alves - Front
  
-- Luiz Armando - Front- Tela de ADM
- 
+- Luiz Armando - Front
+  
 - Davi Reis - Front
 
 - João Pedro S. Caetano - Back - Editar Eventos Admin
