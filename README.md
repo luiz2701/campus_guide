@@ -116,7 +116,7 @@ Sprint 1 - (06/05 - 13/05)
 
 - Kauã - Back - Criação do banco de dados
 
-- 2
+- Luís Gustavo - Back
 
 - 3
 
@@ -130,7 +130,7 @@ Sprint 2 - (13/05 - 27/05)
 
 - Kauã - Back -
  
-- 2
+- Luís Gustavo - Back
  
 - 3
  
@@ -144,7 +144,7 @@ Sprint 3 - (27/05 - 03/06)
 
 - Kauã - Back -
 
-- 2
+- Luís Gustavo - Back
 
 - 3
 
