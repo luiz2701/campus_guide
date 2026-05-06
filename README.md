@@ -107,3 +107,11 @@ Após finalizado, volte no vs code e novamente rode `flutter doctor`, se todos o
 ## ⚠️ Observações
 
 Pode ser que ao abrir o projeto, seu vs code alerte que não há um Flutter SDK instalado, se isso ocorrer você pode seguir com a instalação do SDK normalmente, mas lembre-se que ainda é necessário instalar a extensão Flutter
+
+
+
+## Divisão de Tarefas
+
+Sprint 1
+
+Kauã - Back - Criação do banco de dados
