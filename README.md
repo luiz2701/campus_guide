@@ -107,3 +107,49 @@ Após finalizado, volte no vs code e novamente rode `flutter doctor`, se todos o
 ## ⚠️ Observações
 
 Pode ser que ao abrir o projeto, seu vs code alerte que não há um Flutter SDK instalado, se isso ocorrer você pode seguir com a instalação do SDK normalmente, mas lembre-se que ainda é necessário instalar a extensão Flutter
+
+
+
+## Divisão de Tarefas
+
+Sprint 1 - (06/05 - 13/05)
+
+- Kauã - Back - Criação do banco de dados + buscar dados perfil/usuario
+
+- Luís Gustavo - Back - auth login/cadastro
+
+- José Alves - Front -  tela de autenticação
+
+- Luiz Armando - Front - Tela de Eventos
+
+- Davi Reis - Front - Criação dos componentes da interface
+
+- João Pedro S. Caetano - Back - Cadastro de Eventos Admin 
+
+Sprint 2 - (13/05 - 27/05)
+
+- Kauã - Back - edição de perfil
+ 
+- Luís Gustavo - Back - aprimorar validação
+ 
+- José Alves - Front - integração com o back
+ 
+- Luiz Armando - Front- integração com backend
+  
+- Davi Reis - Front - Criar tela de perfil
+
+- João Pedro S. Caetano - Back - Editar Eventos Admin
+
+Sprint 3 - (27/05 - 03/06)
+
+- Kauã - Back - debug
+
+- Luís Gustavo - Back - debug
+
+- José Alves - Front - testes finais
+
+- Luiz Armando - Front - Verificação de Erros
+
+- Davi Reis - Front - Refinamento de UI
+
+- João Pedro S. Caetano - Back - Lista de Inscritos
