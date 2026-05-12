@@ -13,6 +13,9 @@ import 'components/cards/event_details_card.dart';
 
 import 'components/navigation/bottom_nav_bar.dart';
 
+import 'components/dialogs/success_dialog.dart';
+import 'components/dialogs/error_dialog.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -49,7 +52,7 @@ class _ComponentsPreviewPageState extends State<ComponentsPreviewPage> {
       backgroundColor: const Color(0xFF2F49D1),
 
       appBar: AppBar(
-        title: const Text("Preview Components"),
+        title: const Text("Preview dos Components"),
         backgroundColor: const Color(0xFF2F49D1),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -96,9 +99,9 @@ class _ComponentsPreviewPageState extends State<ComponentsPreviewPage> {
 
             const SizedBox(height: 40),
 
-            // ================= BUTTONS =================
+            // ================= BUTTONS/DIALOGS =================
             const Text(
-              "Buttons",
+              "Buttons e Dialogs",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -108,7 +111,19 @@ class _ComponentsPreviewPageState extends State<ComponentsPreviewPage> {
 
             const SizedBox(height: 20),
 
-            PrimaryButton(text: "Entrar", onPressed: () {}),
+            PrimaryButton(
+              text: "Mostrar Sucesso",
+
+              onPressed: () {
+                SuccessDialog.show(
+                  context,
+
+                  title: "Inscrição realizada",
+
+                  message: "Você foi inscrito com sucesso no evento.",
+                );
+              },
+            ),
 
             const SizedBox(height: 20),
 
@@ -116,14 +131,18 @@ class _ComponentsPreviewPageState extends State<ComponentsPreviewPage> {
 
             const SizedBox(height: 20),
 
-            DangerButton(text: "Excluir Evento", onPressed: () {}),
+            DangerButton(
+              text: "Mostrar Erro",
 
-            const SizedBox(height: 20),
+              onPressed: () {
+                ErrorDialog.show(
+                  context,
 
-            PrimaryButton(
-              text: "Carregando...",
-              loading: true,
-              onPressed: () {},
+                  title: "Erro",
+
+                  message: "Não foi possível realizar a operação.",
+                );
+              },
             ),
 
             const SizedBox(height: 40),
@@ -170,6 +189,7 @@ class _ComponentsPreviewPageState extends State<ComponentsPreviewPage> {
             ),
 
             const SizedBox(height: 40),
+
           ],
         ),
       ),
