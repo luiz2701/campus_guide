@@ -70,10 +70,10 @@ class Popups {
                     ),
                     Text(
                       'Espereando confirmação...',
-                      style: TextStyle(
-                        fontSize: 18,
-                        leadingDistribution: TextLeadingDistribution.even,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      )
                     ),
                     Text(
                       'Enviamos um link de confirmação para seu',
@@ -111,7 +111,7 @@ class Popups {
                   child: Center(
                     child: Text(
                       "Aguardando...",
-                      style: TextStyle(fontSize: 12),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
                 ),
@@ -182,10 +182,10 @@ class Popups {
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
                           'Email não confirmado',
-                          style: TextStyle(
-                            fontSize: 18,
-                            leadingDistribution: TextLeadingDistribution.even,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )
                         ),
                       ),
                       Text(
@@ -240,7 +240,7 @@ class Popups {
                       ),
                   child: Text(
                     "Voltar",
-                    style: TextStyle(fontSize: 14, color: Colors.white),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -293,10 +293,10 @@ class Popups {
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
                           'Email confirmado',
-                          style: TextStyle(
-                            fontSize: 18,
-                            leadingDistribution: TextLeadingDistribution.even,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontSize: 20,
+                            fontWeight:  FontWeight.bold,
+                          )
                         ),
                       ),
                       Text(
@@ -351,7 +351,7 @@ class Popups {
                       ),
                   child: Text(
                     "Avançar",
-                    style: TextStyle(fontSize: 14, color: Colors.white),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
                   ),
                   onPressed: () {
                     Navigator.push(
