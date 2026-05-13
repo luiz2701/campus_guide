@@ -1,143 +1,126 @@
-import 'dart:convert';
+import 'package:flutter/material.dart';
+import '../crudAdmin/event_model.dart';
+import '../crudAdmin/event_repository.dart';
 
-import 'package:http/http.dart' as http;
+class EventController extends ChangeNotifier {
+  final EventRepository _repo = EventRepository();
 
-import 'event_model.dart';
+  List<EventModel> eventos = [];
+  bool carregando = false;
+  String? erro;
 
-class EventService {
-  static const String baseUrl = 'http://localhost:3000/api/v1/events';
+  // ─── Helpers internos ────────────────────────────────────────────────────
 
-  final http.Client client;
+  void _setCarregando(bool valor) {
+    carregando = valor;
+    notifyListeners();
+  }
 
-  EventService({http.Client? client}) : client = client ?? http.Client();
+  void _setErro(String? mensagem) {
+    erro = mensagem;
+    notifyListeners();
+  }
 
-  // Criar evento
+  // ─── Operações CRUD ──────────────────────────────────────────────────────
 
-  Future<EventModel> createEvent({
-    required String token,
-    required EventModel event,
+  /// Carrega todos os eventos do Firestore e armazena na lista local
+  Future<void> carregarEventos() async {
+    _setCarregando(true);
+    _setErro(null);
+    try {
+      eventos = await _repo.buscarTodos();
+    } catch (e) {
+      _setErro('Erro ao carregar eventos: $e');
+    } finally {
+      _setCarregando(false);
+    }
+  }
+
+  /// Cria um novo evento no Firestore
+  Future<bool> criarEvento({
+    required String titulo,
+    required String descricao,
+    required DateTime dataInicio,
+    required DateTime dataFim,
+    required String local,
+    required int vagasTotal,
+    required String curso,
+    List<Map<String, String>> ministrantes = const [],
   }) async {
-    final response = await client.post(
-      Uri.parse(baseUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(event.toJson()),
-    ); //Create
-
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
-      return EventModel.fromJson(data);
-    }
-
-    throw Exception('Erro ao criar evento: ${response.body}');
-  }
-
-  // Get all events
-
-  Future<List<EventModel>> getEvents({
-    int page = 1,
-    int limit = 10,
-    String? search,
-    String? category,
-  }) async {
-    final uri = Uri.parse(baseUrl).replace(
-      queryParameters: {
-        'page': '$page',
-        'limit': '$limit',
-        if (search != null) 'search': search,
-        if (category != null) 'category': category,
-      },
-    );
-
-    final response = await client.get(uri);
-
-    if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
-
-      return data.map((e) => EventModel.fromJson(e)).toList();
-    }
-
-    throw Exception('Erro ao buscar eventos');
-  }
-
-  // Get event by ID
-
-  Future<EventModel> getEventById(String id) async {
-    final response = await client.get(Uri.parse('$baseUrl/$id'));
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
-      return EventModel.fromJson(data);
-    }
-
-    throw Exception('Evento não encontrado');
-  }
-
-  // Update de evento
-
-  Future<EventModel> updateEvent({
-    required String token,
-    required String id,
-    required Map<String, dynamic> data,
-  }) async {
-    final response = await client.put(
-      Uri.parse('$baseUrl/$id'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-
-      return EventModel.fromJson(responseData);
-    }
-
-    throw Exception('Erro ao atualizar evento');
-  }
-
-  // Deletar evento
-
-  Future<void> deleteEvent({required String token, required String id}) async {
-    final response = await client.delete(
-      Uri.parse('$baseUrl/$id'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response.statusCode != 200 && response.statusCode != 204) {
-      throw Exception('Erro ao deletar evento');
+    _setCarregando(true);
+    _setErro(null);
+    try {
+      final agora = DateTime.now();
+      final evento = EventModel(
+        id: '', // o Firestore vai gerar o ID
+        titulo: titulo,
+        descricao: descricao,
+        dataInicio: dataInicio,
+        dataFim: dataFim,
+        local: local,
+        vagasTotal: vagasTotal,
+        curso: curso,
+        ministrantes: ministrantes,
+        criadoEm: agora,
+        atualizadoEm: agora,
+      );
+      await _repo.criar(evento);
+      await carregarEventos();
+      return true;
+    } catch (e) {
+      _setErro('Erro ao criar evento: $e');
+      return false;
+    } finally {
+      _setCarregando(false);
     }
   }
 
-  // Cancelar evento
-
-  Future<void> cancelEvent({required String token, required String id}) async {
-    final response = await client.patch(
-      Uri.parse('$baseUrl/$id/cancel'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Erro ao cancelar evento');
+  /// Edita um evento existente
+  Future<bool> editarEvento(EventModel eventoAtualizado) async {
+    _setCarregando(true);
+    _setErro(null);
+    try {
+      await _repo.atualizar(eventoAtualizado);
+      await carregarEventos();
+      return true;
+    } catch (e) {
+      _setErro('Erro ao editar evento: $e');
+      return false;
+    } finally {
+      _setCarregando(false);
     }
   }
 
-  // Finalizar evento
+  /// Deleta permanentemente um evento
+  Future<bool> deletarEvento(String id) async {
+    _setCarregando(true);
+    _setErro(null);
+    try {
+      await _repo.deletar(id);
+      eventos.removeWhere((e) => e.id == id);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _setErro('Erro ao deletar evento: $e');
+      return false;
+    } finally {
+      _setCarregando(false);
+    }
+  }
 
-  Future<void> finishEvent({required String token, required String id}) async {
-    final response = await client.patch(
-      Uri.parse('$baseUrl/$id/finish'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Erro ao finalizar evento');
+  /// Cancela o evento (muda o status, não apaga)
+  Future<bool> cancelarEvento(String id) async {
+    _setCarregando(true);
+    _setErro(null);
+    try {
+      await _repo.cancelar(id);
+      await carregarEventos();
+      return true;
+    } catch (e) {
+      _setErro('Erro ao cancelar evento: $e');
+      return false;
+    } finally {
+      _setCarregando(false);
     }
   }
 }
