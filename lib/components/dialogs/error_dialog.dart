@@ -21,7 +21,6 @@ class ErrorDialog {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Ícone X com borda circular, sem preenchimento
                 Container(
                   width: 52,
                   height: 52,
@@ -38,7 +37,6 @@ class ErrorDialog {
 
                 const SizedBox(height: 16),
 
-                // Título
                 Text(
                   title,
                   textAlign: TextAlign.center,
@@ -51,7 +49,6 @@ class ErrorDialog {
 
                 const SizedBox(height: 12),
 
-                // Mensagem
                 Text(
                   message,
                   textAlign: TextAlign.center,
@@ -64,7 +61,6 @@ class ErrorDialog {
 
                 const SizedBox(height: 28),
 
-                // Botão vermelho arredondado
                 SizedBox(
                   width: double.infinity,
                   height: 50,

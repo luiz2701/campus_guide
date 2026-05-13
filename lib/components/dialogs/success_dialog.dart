@@ -21,12 +21,10 @@ class SuccessDialog {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 const Icon(Icons.check, color: Colors.black87, size: 40),
 
                 const SizedBox(height: 16),
 
-                // Título
                 Text(
                   title,
                   textAlign: TextAlign.center,
