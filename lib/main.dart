@@ -189,7 +189,6 @@ class _ComponentsPreviewPageState extends State<ComponentsPreviewPage> {
             ),
 
             const SizedBox(height: 40),
-
           ],
         ),
       ),

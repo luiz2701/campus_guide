@@ -114,13 +114,13 @@ Pode ser que ao abrir o projeto, seu vs code alerte que não há um Flutter SDK 
 
 Sprint 1 - (06/05 - 13/05)
 
-- Kauã - Back - Criação do banco de dados
+- Kauã - Back - Criação do banco de dados + buscar dados perfil/usuario
 
-- Luís Gustavo - Back
+- Luís Gustavo - Back - auth login/cadastro
 
-- José Alves - Front-  tela de login 
+- José Alves - Front -  tela de autenticação
 
-- Luiz Armando - Front- Tela de ADM
+- Luiz Armando - Front - Tela de Eventos
 
 - Davi Reis - Front - Criação dos componentes da interface
 
@@ -128,28 +128,28 @@ Sprint 1 - (06/05 - 13/05)
 
 Sprint 2 - (13/05 - 27/05)
 
-- Kauã - Back -
+- Kauã | Modal detalhado - docente
  
-- Luís Gustavo - Back - Tela de Login
+- Luís Gustavo | Modal detalhado - aluno
  
-- José Alves - Front
+- José Alves | Telas de auth
  
-- Luiz Armando - Front- Tela de ADM
- 
-- Davi Reis - Front
+- Luiz Armando | Tela Home + permissões
+  
+- Davi Reis | Tela de perfil
 
-- João Pedro S. Caetano - Back - Editar Eventos Admin
+- João Pedro S. Caetano | Tela de Criar Eventos
 
 Sprint 3 - (27/05 - 03/06)
 
-- Kauã - Back -
+- Kauã | Melhoramento
 
-- Luís Gustavo - Back
+- Luís Gustavo | Melhoramento
 
-- José Alves - Front
+- José Alves | Melhoramento
 
-- Luiz Armando - Front
+- Luiz Armando | Melhoramento
 
-- Davi Reis - Front
+- Davi Reis | Melhoramento
 
-- João Pedro S. Caetano - Back - Lista de Inscritos
+- João Pedro S. Caetano | Melhoramento
