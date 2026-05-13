@@ -128,28 +128,28 @@ Sprint 1 - (06/05 - 13/05)
 
 Sprint 2 - (13/05 - 27/05)
 
-- Kauã - Back - edição de perfil
+- Kauã | Modal detalhado - docente
  
-- Luís Gustavo - Back - aprimorar validação
+- Luís Gustavo | Modal detalhado - aluno
  
-- José Alves - Front - integração com o back
+- José Alves | Telas de auth
  
-- Luiz Armando - Front- integração com backend
+- Luiz Armando | Tela Home + permissões
   
-- Davi Reis - Front - Criar tela de perfil
+- Davi Reis | Tela de perfil
 
-- João Pedro S. Caetano - Back - Editar Eventos Admin
+- João Pedro S. Caetano | Tela de Criar Eventos
 
 Sprint 3 - (27/05 - 03/06)
 
-- Kauã - Back - debug
+- Kauã | Melhoramento
 
-- Luís Gustavo - Back - debug
+- Luís Gustavo | Melhoramento
 
-- José Alves - Front - testes finais
+- José Alves | Melhoramento
 
-- Luiz Armando - Front - Verificação de Erros
+- Luiz Armando | Melhoramento
 
-- Davi Reis - Front - Refinamento de UI
+- Davi Reis | Melhoramento
 
-- João Pedro S. Caetano - Back - Lista de Inscritos
+- João Pedro S. Caetano | Melhoramento
