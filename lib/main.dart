@@ -6,7 +6,16 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MaterialApp(home: Projeto()));
+  runApp(MaterialApp(
+    theme: ThemeData(
+      textTheme: TextTheme(
+        displayLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold,),
+        headlineMedium: TextStyle(fontSize: 22,),
+        titleLarge: TextStyle(fontSize: 20),
+        labelLarge: TextStyle(fontSize: 22)
+      )
+    ),
+    home: Projeto()));
 }
 
 class Projeto extends StatelessWidget {
