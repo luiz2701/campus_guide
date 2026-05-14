@@ -4,19 +4,21 @@ class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool loading;
+  final double height;
 
   const PrimaryButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.loading = false,
+    this.height = 55,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: height,
       child: ElevatedButton(
         onPressed: loading ? null : onPressed,
         style: ElevatedButton.styleFrom(

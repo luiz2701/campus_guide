@@ -4,10 +4,14 @@ class PasswordField extends StatefulWidget {
   final String hint;
   final TextEditingController controller;
 
+  final bool enabled;
+
   const PasswordField({
     super.key,
     required this.hint,
     required this.controller,
+
+    this.enabled = true,
   });
 
   @override
@@ -21,23 +25,32 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+
       obscureText: obscure,
+
+      readOnly: !widget.enabled,
+
       decoration: InputDecoration(
         hintText: widget.hint,
+
         filled: true,
-        fillColor: Colors.white,
+
+        fillColor: widget.enabled ? Colors.white : Colors.grey.shade200,
+
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
+
           borderSide: BorderSide.none,
         ),
+
         suffixIcon: IconButton(
-          icon: Icon(
-            obscure ? Icons.visibility_off : Icons.visibility,
-          ),
+          icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
+
           onPressed: () {
             setState(() {
               obscure = !obscure;

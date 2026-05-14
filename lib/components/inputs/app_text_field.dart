@@ -4,12 +4,14 @@ class AppTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final bool enabled;
 
   const AppTextField({
     super.key,
     required this.hint,
     required this.controller,
     this.keyboardType = TextInputType.text,
+    this.enabled = true,
   });
 
   @override
@@ -18,6 +20,7 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        enabled: enabled,
         hintText: hint,
         filled: true,
         fillColor: Colors.white,

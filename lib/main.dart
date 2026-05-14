@@ -16,6 +16,8 @@ import 'components/navigation/bottom_nav_bar.dart';
 import 'components/dialogs/success_dialog.dart';
 import 'components/dialogs/error_dialog.dart';
 
+import 'features/profile/profile_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const ComponentsPreviewPage(),
+      home: const ProfilePage(),
     );
   }
 }
