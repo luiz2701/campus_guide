@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../components/buttons/primary_button.dart';
 import '../../components/navigation/bottom_nav_bar.dart';
+import '../../components/dialogs/logout_dialog.dart';
 
 import 'edit_profile_page.dart';
 
@@ -161,7 +162,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   showArrow: false,
 
-                  onTap: () {},
+                  onTap: () {
+                    LogoutDialog.show(
+                      context,
+
+                      onConfirm: () {
+                        print("Usuário saiu");
+                      },
+                    );
+                  },
                 ),
 
                 const Divider(),

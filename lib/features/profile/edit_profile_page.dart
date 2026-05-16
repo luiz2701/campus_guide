@@ -46,14 +46,57 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
           children: [
             Center(
-              child: Container(
-                width: 120,
-                height: 120,
+              child: Stack(
+                clipBehavior: Clip.none,
 
-                decoration: const BoxDecoration(
-                  color: Color(0xFF0D4DB3),
-                  shape: BoxShape.circle,
-                ),
+                children: [
+                  Container(
+                    width: 140,
+                    height: 140,
+
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF0D4DB3),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+
+                  Positioned(
+                    bottom: 4,
+                    right: -2,
+
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Alterar foto");
+                      },
+
+                      child: Container(
+                        width: 42,
+                        height: 42,
+
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+
+                          shape: BoxShape.circle,
+
+                          border: Border.all(color: Colors.black12, width: 2),
+
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+
+                        child: const Icon(
+                          Icons.add,
+                          size: 28,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
