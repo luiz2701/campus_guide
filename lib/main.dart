@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-import 'components/buttons/danger_button.dart';
-import 'components/buttons/primary_button.dart';
-import 'components/buttons/secondary_button.dart';
-
-import 'components/inputs/app_text_field.dart';
-import 'components/inputs/password_field.dart';
-import 'components/inputs/search_field.dart';
-
-import 'components/cards/event_card.dart';
-import 'components/cards/event_details_card.dart';
-
-import 'components/navigation/bottom_nav_bar.dart';
-
-import 'components/dialogs/success_dialog.dart';
-import 'components/dialogs/error_dialog.dart';
+import 'firebase_options.dart';
 
 import 'features/profile/profile_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -27,173 +20,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const ProfilePage(),
-    );
-  }
-}
-
-class ComponentsPreviewPage extends StatefulWidget {
-  const ComponentsPreviewPage({super.key});
-
-  @override
-  State<ComponentsPreviewPage> createState() => _ComponentsPreviewPageState();
-}
-
-class _ComponentsPreviewPageState extends State<ComponentsPreviewPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final searchController = TextEditingController();
-
-  int currentIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF2F49D1),
-
-      appBar: AppBar(
-        title: const Text("Preview dos Components"),
-        backgroundColor: const Color(0xFF2F49D1),
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
-
-      bottomNavigationBar: AppBottomNavBar(
-        currentIndex: currentIndex,
-
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-      ),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            // ================= INPUTS =================
-            const Text(
-              "Inputs",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            AppTextField(hint: "Email", controller: emailController),
-
-            const SizedBox(height: 20),
-
-            PasswordField(hint: "Senha", controller: passwordController),
-
-            const SizedBox(height: 20),
-
-            SearchField(controller: searchController),
-
-            const SizedBox(height: 40),
-
-            // ================= BUTTONS/DIALOGS =================
-            const Text(
-              "Buttons e Dialogs",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            PrimaryButton(
-              text: "Mostrar Sucesso",
-
-              onPressed: () {
-                SuccessDialog.show(
-                  context,
-
-                  title: "Inscrição realizada",
-
-                  message: "Você foi inscrito com sucesso no evento.",
-                );
-              },
-            ),
-
-            const SizedBox(height: 20),
-
-            SecondaryButton(text: "Cancelar", onPressed: () {}),
-
-            const SizedBox(height: 20),
-
-            DangerButton(
-              text: "Mostrar Erro",
-
-              onPressed: () {
-                ErrorDialog.show(
-                  context,
-
-                  title: "Erro",
-
-                  message: "Não foi possível realizar a operação.",
-                );
-              },
-            ),
-
-            const SizedBox(height: 40),
-
-            // ================= CARDS =================
-            const Text(
-              "Cards",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            EventCard(
-              title: "TechConnect 2026",
-              date: "03\nABR",
-              description:
-                  "Evento de tecnologia e inovação com palestras e workshops.",
-              onTap: () {},
-            ),
-
-            const SizedBox(height: 20),
-
-            EventDetailsCard(
-              title: "TechConnect 2026: Do Código ao Mercado",
-
-              description:
-                  "Uma palestra focada em quem quer sair da teoria e entrar no jogo de verdade.",
-
-              location: "Auditório Padre Arnobio",
-
-              remainingVacancies: 30,
-
-              isOpen: true,
-
-              speakers: [
-                {"name": "Matheus", "image": "assets/images/"},
-
-                {"name": "Mariana", "image": "assets/images/"},
-              ],
-            ),
-
-            const SizedBox(height: 40),
-          ],
-        ),
-      ),
+      home: ProfilePage(),
     );
   }
 }
