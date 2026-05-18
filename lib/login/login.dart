@@ -1,6 +1,7 @@
-import 'package:campus_guide/login/popups.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:campus_guide/login/register.dart';
 import 'package:flutter/material.dart';
+import 'auth_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,10 +14,49 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formkey = GlobalKey<FormState>();
-
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController senhalController = TextEditingController();
+
+  final AuthService _authService = AuthService();
+  bool _carregando = false;
+
+  void _login() async {
+    if (_formkey.currentState!.validate()) {
+      setState(() {
+        _carregando = true;
+      });
+
+      try {
+        final user = await _authService.logarUsuario(
+          email: emailController.text,
+          senha: senhalController.text,
+        );
+
+        if (user != null && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login efetuado com sucesso!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _carregando = false;
+          });
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +73,6 @@ class _LoginState extends State<Login> {
                   child: Image.asset(
                     'imagens/CampusGuide_png.png',
                     width: 250,
-          
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -42,208 +81,179 @@ class _LoginState extends State<Login> {
                 alignment: Alignment.topCenter,
                 width: 350,
                 height: 600,
-                padding: EdgeInsets.only(top: 40),
-                margin: EdgeInsets.zero,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: (Form(
-                    key: _formkey,
-                        
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 17,
-                            bottom: 20,
-                          ),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: 10,
-                                  ),
-                                  child: Text(
-                                    'Entrar',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.displayLarge,
-                                  ),
+                padding: const EdgeInsets.only(top: 40),
+                child: Form(
+                  key: _formkey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 17, bottom: 20),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  'Entrar',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.displayLarge,
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'Não tem uma conta?',
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'Não tem uma conta?',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.only(left: 3),
+                                      overlayColor: Colors.transparent,
+                                      minimumSize: Size.zero,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      foregroundColor: const Color.fromARGB(
+                                        255,
+                                        48,
+                                        60,
+                                        231,
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'inscreva-se',
                                       style: TextStyle(fontSize: 12),
                                     ),
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.only(
-                                          bottom: 0,
-                                          top: 0,
-                                          right: 0,
-                                          left: 3,
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Register(),
                                         ),
-                                        overlayColor: Colors.transparent,
-                                        minimumSize: Size.zero,
-                                        tapTargetSize: MaterialTapTargetSize
-                                            .shrinkWrap,
-                                        foregroundColor: Color.fromARGB(
-                                          255,
-                                          48,
-                                          60,
-                                          231,
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'inscreva-se',
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                        
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                Register(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        
-                        Opacity(
+                      ),
+
+                      Opacity(
+                        opacity: 0.2,
+                        child: TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            labelText: 'Email (Institucional)',
+                            labelStyle: const TextStyle(fontSize: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'digite seu email';
+                            return null;
+                          },
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12, top: 12),
+                        child: Opacity(
                           opacity: 0.2,
                           child: TextFormField(
-                            controller: emailController,
-                        
+                            controller: senhalController,
+                            obscureText: true,
                             decoration: InputDecoration(
-                              labelText: 'Email (Institucional)',
-                              labelStyle: TextStyle(fontSize: 12),
+                              labelText: 'Senha',
+                              labelStyle: const TextStyle(fontSize: 12),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
-                        
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'digite seu email';
-                              }
-                        
-                              if (value != 'jose@gmail.com') {
-                                return 'Email invalido';
-                              }
-                        
+                              if (value == null || value.isEmpty)
+                                return 'Digite sua senha';
                               return null;
                             },
                           ),
                         ),
-                        
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 12,
-                            top: 12,
-                          ),
-                          child: Opacity(
-                            opacity: 0.2,
-                            child: TextFormField(
-                              controller: senhalController,
-                        
-                              decoration: InputDecoration(
-                                labelText: 'Senha',
-                                labelStyle: TextStyle(fontSize: 12),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                        
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Digite sua senha';
-                                }
-                        
-                                if (value != '1234') {
-                                  return 'senha invalida';
-                                }
-                        
-                                return null;
-                              },
-                            ),
-                          ),
-                        ),
-                        
-                        Container(
-                          width: 500,
-                          height: 45,
-                        
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (_formkey.currentState!.validate()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (contex) => Login(),
-                                  ),
-                                );
-                              }
-                            },
-                        
-                            child: Text(
-                              'Avançar',
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                            style: TextButton.styleFrom(
-                              backgroundColor: Color.fromARGB(
-                                255,
-                                48,
-                                60,
-                                231,
-                              ),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                          ),
-                        ),
-                        TextButton(
+                      ),
+
+                      SizedBox(
+                        width: 500,
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: _carregando ? null : _login,
                           style: TextButton.styleFrom(
-                            padding: EdgeInsets.only(
-                              top: 14,
-                              bottom: 0,
-                              right: 0,
-                              left: 0,
-                            ),
-                            overlayColor: Colors.transparent,
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            foregroundColor: Color.fromARGB(
+                            backgroundColor: const Color.fromARGB(
                               255,
                               48,
                               60,
                               231,
                             ),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                           ),
-                          child: Text(
-                            ' Esqueci minha senha',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          onPressed: () {},
+                          child: _carregando
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  'Avançar',
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.only(top: 14),
+                          overlayColor: Colors.transparent,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          foregroundColor: const Color.fromARGB(
+                            255,
+                            48,
+                            60,
+                            231,
+                          ),
+                        ),
+                        child: const Text(
+                          ' Esqueci minha senha',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        onPressed: () {
+                          if (emailController.text.isNotEmpty) {
+                            FirebaseAuth.instance.sendPasswordResetEmail(
+                              email: emailController.text.trim(),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('E-mail de recuperação enviado!'),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
