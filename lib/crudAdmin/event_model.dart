@@ -12,6 +12,7 @@ class EventModel {
   final int vagasTotal;
   final int vagasOcupadas;
   final String curso;
+  final String periodo; // ex: "2º período", "Noturno", etc.
   final List<Map<String, String>> ministrantes; // [{name, image}]
   final EventStatus status;
   final DateTime criadoEm;
@@ -27,6 +28,7 @@ class EventModel {
     required this.vagasTotal,
     this.vagasOcupadas = 0,
     required this.curso,
+    this.periodo = '',
     this.ministrantes = const [],
     this.status = EventStatus.ativo,
     required this.criadoEm,
@@ -54,6 +56,7 @@ class EventModel {
       'vagasTotal': vagasTotal,
       'vagasOcupadas': vagasOcupadas,
       'curso': curso,
+      'periodo': periodo,
       'ministrantes': ministrantes,
       'status': status.name,
       'criadoEm': Timestamp.fromDate(criadoEm),
@@ -74,6 +77,7 @@ class EventModel {
       vagasTotal: data['vagasTotal'] ?? 0,
       vagasOcupadas: data['vagasOcupadas'] ?? 0,
       curso: data['curso'] ?? '',
+      periodo: data['periodo'] ?? '',
       ministrantes: List<Map<String, String>>.from(
         (data['ministrantes'] as List? ?? []).map(
           (m) => Map<String, String>.from(m as Map),
@@ -95,6 +99,7 @@ class EventModel {
     int? vagasTotal,
     int? vagasOcupadas,
     String? curso,
+    String? periodo,
     List<Map<String, String>>? ministrantes,
     EventStatus? status,
   }) {
@@ -108,6 +113,7 @@ class EventModel {
       vagasTotal: vagasTotal ?? this.vagasTotal,
       vagasOcupadas: vagasOcupadas ?? this.vagasOcupadas,
       curso: curso ?? this.curso,
+      periodo: periodo ?? this.periodo,
       ministrantes: ministrantes ?? this.ministrantes,
       status: status ?? this.status,
       criadoEm: criadoEm,

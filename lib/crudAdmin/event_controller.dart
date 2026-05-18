@@ -45,6 +45,7 @@ class EventController extends ChangeNotifier {
     required String local,
     required int vagasTotal,
     required String curso,
+    String periodo = '',
     List<Map<String, String>> ministrantes = const [],
   }) async {
     _setCarregando(true);
@@ -52,7 +53,7 @@ class EventController extends ChangeNotifier {
     try {
       final agora = DateTime.now();
       final evento = EventModel(
-        id: '', // o Firestore vai gerar o ID
+        id: '',
         titulo: titulo,
         descricao: descricao,
         dataInicio: dataInicio,
@@ -60,6 +61,7 @@ class EventController extends ChangeNotifier {
         local: local,
         vagasTotal: vagasTotal,
         curso: curso,
+        periodo: periodo,
         ministrantes: ministrantes,
         criadoEm: agora,
         atualizadoEm: agora,
