@@ -11,6 +11,8 @@ class EventDetailsCard extends StatelessWidget {
 
   final List<Map<String, String>> speakers;
 
+  final bool showVacancies;
+
   const EventDetailsCard({
     super.key,
     required this.title,
@@ -19,6 +21,8 @@ class EventDetailsCard extends StatelessWidget {
     required this.remainingVacancies,
     required this.isOpen,
     required this.speakers,
+
+    this.showVacancies = true,
   });
 
   @override
@@ -74,10 +78,11 @@ class EventDetailsCard extends StatelessWidget {
 
               const Spacer(),
 
-              Text(
-                "Restam $remainingVacancies vaga(s)",
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
+              if (showVacancies)
+                Text(
+                  "Restam $remainingVacancies vaga(s)",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
             ],
           ),
 
