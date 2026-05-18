@@ -10,10 +10,10 @@ void main() async {
     MaterialApp(
       theme: ThemeData(
         textTheme: TextTheme(
-          displayLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          headlineMedium: TextStyle(fontSize: 22),
-          titleLarge: TextStyle(fontSize: 20),
-          labelLarge: TextStyle(fontSize: 22),
+          displayLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          headlineMedium: TextStyle(fontSize: 17),
+          titleLarge: TextStyle(fontSize: 24),
+          labelLarge: TextStyle(fontSize: 12),
         ),
       ),
       home: Projeto(),

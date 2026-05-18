@@ -133,7 +133,7 @@ class _RegisterState extends State<Register> {
                                         style: TextStyle(fontSize: 12),
                                       ),
                                       onPressed: () {
-                                        Navigator.pushReplacement(
+                                        Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => const Login(),
@@ -249,9 +249,10 @@ class _RegisterState extends State<Register> {
                                   )
                                 : Text(
                                     'Avançar',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.labelLarge,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(color: Colors.white),
                                   ),
                           ),
                         ),

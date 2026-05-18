@@ -131,7 +131,7 @@ class _LoginState extends State<Login> {
                                       style: TextStyle(fontSize: 12),
                                     ),
                                     onPressed: () {
-                                      Navigator.pushReplacement(
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
@@ -218,7 +218,8 @@ class _LoginState extends State<Login> {
                                 )
                               : Text(
                                   'Avançar',
-                                  style: Theme.of(context).textTheme.labelLarge,
+                                  style: Theme.of(context).textTheme.labelLarge
+                                      ?.copyWith(color: Colors.white),
                                 ),
                         ),
                       ),
@@ -240,16 +241,7 @@ class _LoginState extends State<Login> {
                           style: TextStyle(fontSize: 12),
                         ),
                         onPressed: () {
-                          if (emailController.text.isNotEmpty) {
-                            FirebaseAuth.instance.sendPasswordResetEmail(
-                              email: emailController.text.trim(),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('E-mail de recuperação enviado!'),
-                              ),
-                            );
-                          }
+                          
                         },
                       ),
                     ],

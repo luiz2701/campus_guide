@@ -1,42 +1,64 @@
 import 'package:campus_guide/login/login.dart';
-import 'package:campus_guide/login/register.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'dart:async';
 
 class Popups {
   void esperandoConfirmacao(BuildContext context) {
-    Timer? timer;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    Timer? checkTimer;
+    Timer? timeoutTimer;
+    int tempoRestante = 60;
+
+    if (user != null && !user.emailVerified) {
+      user.sendEmailVerification().catchError((e) {
+        debugPrint("Erro ao enviar e-mail: $e");
+      });
+    }
 
     showDialog(
       context: context,
       barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        checkTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+          user = auth.currentUser;
+          if (user != null) {
+            await user!.reload();
 
-      builder: (BuildContext context) {
-        timer = Timer(Duration(seconds: 5), () {
-          if (Navigator.canPop(context)) {
-            Navigator.pop(context);
-            naoEncontrado(context);
+            if (auth.currentUser!.emailVerified) {
+              timer.cancel();
+              timeoutTimer?.cancel();
+              if (Navigator.canPop(dialogContext)) {
+                Navigator.pop(dialogContext);
+                encontrado(context);
+              }
+            }
           }
-          ;
         });
+
+        timeoutTimer = Timer(Duration(seconds: tempoRestante), () {
+          checkTimer?.cancel();
+          if (Navigator.canPop(dialogContext)) {
+            Navigator.pop(dialogContext); 
+            naoEncontrado(context); 
+          }
+        });
+
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
-
-          shape: UnderlineInputBorder(
+          shape: const UnderlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             borderSide: BorderSide(
-              color: const Color.fromARGB(255, 27, 93, 146),
+              color: Color.fromARGB(255, 27, 93, 146),
               width: 12,
             ),
           ),
-
           backgroundColor: Colors.white,
-
-          content: Container(
+          content: SizedBox(
             width: 320,
             height: 190,
-
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -46,11 +68,10 @@ class Popups {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 110),
+                        const Padding(
+                          padding: EdgeInsets.only(right: 110),
                           child: Icon(Icons.error_outline),
                         ),
-
                         IconButton(
                           style:
                               IconButton.styleFrom(
@@ -61,46 +82,35 @@ class Popups {
                                 ),
                               ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            checkTimer?.cancel();
+                            timeoutTimer?.cancel();
+                            Navigator.pop(dialogContext);
                           },
-                          icon: Icon(Icons.close),
+                          icon: const Icon(Icons.close),
                           iconSize: 15,
                         ),
                       ],
                     ),
                     Text(
-                      'Espereando confirmação...',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )
+                      'Esperando confirmação...',
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Text(
+                    const Text(
                       'Enviamos um link de confirmação para seu',
-                      style: TextStyle(
-                        fontSize: 13,
-                        leadingDistribution: TextLeadingDistribution.even,
-                      ),
+                      style: TextStyle(fontSize: 13),
                     ),
-                    Text(
-                      'email institucional',
-                      style: TextStyle(
-                        fontSize: 13,
-                        leadingDistribution: TextLeadingDistribution.even,
-                      ),
+                    const Text(
+                      'email institucional.',
+                      style: TextStyle(fontSize: 13),
                     ),
-                    Text(
-                      'Confirme seu email para prosseguir',
-                      style: TextStyle(
-                        fontSize: 13,
-                        leadingDistribution: TextLeadingDistribution.even,
-                      ),
+                    const Text(
+                      'Confirme seu email para prosseguir.',
+                      style: TextStyle(fontSize: 13),
                     ),
                   ],
                 ),
-
-                SizedBox(height: 10),
-
+                const SizedBox(height: 10),
                 Container(
                   width: 240,
                   height: 50,
@@ -111,16 +121,16 @@ class Popups {
                   child: Center(
                     child: Text(
                       "Aguardando...",
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: const Color.fromARGB(255, 114, 114, 114),
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-
-          actionsPadding: EdgeInsets.only(bottom: 18.0),
-
+          actionsPadding: const EdgeInsets.only(bottom: 18.0),
           actions: [
             Align(
               alignment: Alignment.topCenter,
@@ -134,10 +144,21 @@ class Popups {
                     ).copyWith(
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
                     ),
-                child: Text("Reenviar email", style: TextStyle(fontSize: 12)),
-                onPressed: () {
-                  Navigator.pop(context);
-                  encontrado(context);
+                child: const Text(
+                  "Reenviar email",
+                  style: TextStyle(fontSize: 12),
+                ),
+                onPressed: () async {
+                  if (user != null) {
+                    await user!.sendEmailVerification();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('E-mail de confirmação reenviado!'),
+                        ),
+                      );
+                    }
+                  }
                 },
               ),
             ),
@@ -151,71 +172,51 @@ class Popups {
     showDialog(
       context: context,
       barrierDismissible: false,
-
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
-
-          shape: UnderlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(
-              color: const Color.fromARGB(255, 27, 93, 146),
-              width: 12,
-            ),
-          ),
-
-          backgroundColor: Colors.white,
-
-          content: Container(
-            width: 320,
-            height: 135,
-            padding: EdgeInsets.zero,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.cancel_outlined, size: 25),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          'Email não confirmado',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          )
-                        ),
-                      ),
-                      Text(
-                        'Não foi possivel confirmar seu email. Verivique',
-                        style: TextStyle(
-                          fontSize: 13,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
-                      Text(
-                        'se seu email está correto e tente novamente',
-                        style: TextStyle(
-                          fontSize: 13,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          actionsPadding: EdgeInsets.only(
+          actionsPadding: const EdgeInsets.only(
             top: 0,
             bottom: 35,
             right: 0,
             left: 0,
           ),
-
+          shape: const UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 27, 93, 146),
+              width: 12,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          content: SizedBox(
+            width: 320,
+            height: 135,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.cancel_outlined, size: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Email não confirmado',
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const Text(
+                    'Não foi possível confirmar seu e-mail a tempo.',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  const Text(
+                    'Verifique sua caixa de entrada e tente de novo.',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ),
           actions: [
             Align(
               alignment: Alignment.topCenter,
@@ -240,13 +241,15 @@ class Popups {
                       ),
                   child: Text(
                     "Voltar",
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelLarge?.copyWith(color: Colors.white),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-
-                      MaterialPageRoute(builder: (context) => Login()),
+                    Navigator.pushAndRemoveUntil(
+                      dialogContext,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                      (route) => false,
                     );
                   },
                 ),
@@ -262,71 +265,51 @@ class Popups {
     showDialog(
       context: context,
       barrierDismissible: false,
-
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
-
-          shape: UnderlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(
-              color: const Color.fromARGB(255, 27, 93, 146),
-              width: 12,
-            ),
-          ),
-
-          backgroundColor: Colors.white,
-
-          content: Container(
-            width: 320,
-            height: 135,
-            padding: EdgeInsets.zero,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.check, size: 25),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          'Email confirmado',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontSize: 20,
-                            fontWeight:  FontWeight.bold,
-                          )
-                        ),
-                      ),
-                      Text(
-                        'Seu email foi confirmado com sucesso!',
-                        style: TextStyle(
-                          fontSize: 13,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
-                      Text(
-                        'Você já pode prosseguir.',
-                        style: TextStyle(
-                          fontSize: 13,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          actionsPadding: EdgeInsets.only(
+          actionsPadding: const EdgeInsets.only(
             top: 0,
             bottom: 35,
             right: 0,
             left: 0,
           ),
-
+          shape: const UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 27, 93, 146),
+              width: 12,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          content: SizedBox(
+            width: 320,
+            height: 135,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.check, size: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Email confirmed',
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const Text(
+                    'Seu email foi confirmado com sucesso!',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  const Text(
+                    'Você já pode prosseguir.',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ),
           actions: [
             Align(
               alignment: Alignment.topCenter,
@@ -351,13 +334,15 @@ class Popups {
                       ),
                   child: Text(
                     "Avançar",
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelLarge?.copyWith(color: Colors.white),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-
-                      MaterialPageRoute(builder: (context) => Login()),
+                    Navigator.pushAndRemoveUntil(
+                      dialogContext,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                      (route) => false,
                     );
                   },
                 ),

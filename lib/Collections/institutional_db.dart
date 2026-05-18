@@ -14,6 +14,19 @@ class InstitutionalDB {
       name: 'Maria Souza',
       role: 'aluno',
     ),
+    '1231112899': _InstitutionalRecord(
+      matricula: '1231112899',
+      email: 'jodantasjunior@gmail.com',
+      name: 'José Alves',
+      role: 'aluno',
+    ),
+
+    '1234887890': _InstitutionalRecord(
+      matricula: '1234887890',
+      email: 'jose.adantas@souunit.com.br',
+      name: 'José Júnior',
+      role: 'aluno',
+    ),
     '20210003': _InstitutionalRecord(
       matricula: '20210003',
       email: 'carlos.mendes@instituicao.edu.br',
@@ -78,11 +91,13 @@ class InstitutionalException implements Exception {
 
   factory InstitutionalException.unknownMatricula() =>
       const InstitutionalException(
-          'Matrícula não encontrada na base institucional.');
+        'Matrícula não encontrada na base institucional.',
+      );
 
   factory InstitutionalException.emailMismatch() =>
       const InstitutionalException(
-          'O email não corresponde à matrícula informada.');
+        'O email não corresponde à matrícula informada.',
+      );
 
   @override
   String toString() => message;
