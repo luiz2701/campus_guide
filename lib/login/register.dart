@@ -37,11 +37,9 @@ class _RegisterState extends State<Register> {
 
         if (!mounted) return;
 
-        // Se deu certo, mostra o popup de confirmação enviado por e-mail
         Popups popup = Popups();
         popup.esperandoConfirmacao(context);
 
-        // Limpa os campos após o sucesso
         matriculaController.clear();
         emailController.clear();
         senhaController.clear();
