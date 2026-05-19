@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'package:campus_guide/features/events/create_event_page.dart';
 import 'crudAdmin/event_controller.dart';
 import 'firebase_options.dart';
 import 'login/login.dart';
@@ -26,6 +28,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ], //Reconhecimento de localização
+      supportedLocales: const [
+        Locale('pt', 'BR'), // Português do Brasil
+      ], // Localização
       theme: ThemeData(
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
@@ -34,7 +44,7 @@ class MyApp extends StatelessWidget {
           labelLarge: TextStyle(fontSize: 22),
         ),
       ),
-      home: const Login(),
+      home: const CreateEventPage(),
     );
   }
 }
