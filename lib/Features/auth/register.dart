@@ -145,7 +145,7 @@ class _RegisterState extends State<Register> {
 
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'digite sua matrícula';
+                                return 'Digite sua matrícula';
                               }
 
                               if (value.length < 11) {
@@ -178,7 +178,7 @@ class _RegisterState extends State<Register> {
 
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'digite o email';
+                                return 'Digite o email';
                               }
 
                               if (!value.contains('@')) {

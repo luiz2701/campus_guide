@@ -6,14 +6,14 @@
 
   Observação: atualmente `AppRoutes.home` está mapeado para `ProfilePage`, por
   isso o app inicia nessa tela. Para iniciar em `Login` altere
-  `initialRoute: AppRoutes.login` ou adicione um guard de autenticação.
+  `initialRoute: AppRoutes.login` ou adicione um guard de autenticação. Feito
 */
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'routes/app_router.dart';
-import 'routes/app_routes.dart';
+import 'Routes/app_router.dart';
+import 'Routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
