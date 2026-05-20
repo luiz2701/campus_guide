@@ -19,7 +19,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   runApp(const MyApp());
 }
 
@@ -35,8 +34,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.register,
+      initialRoute: AppRoutes.login,
       onGenerateRoute: AppRouter.generateRoute,
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          headlineMedium: TextStyle(fontSize: 17),
+          titleLarge: TextStyle(fontSize: 24),
+          labelLarge: TextStyle(fontSize: 12),
+        ),
+      ),
     );
   }
 }
