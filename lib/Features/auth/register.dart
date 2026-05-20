@@ -1,9 +1,24 @@
-import 'package:campus_guide/login/login.dart';
+/*
+  Tela de registro de usuário.
+
+  Formulário básico para coletar matrícula, email institucional e senha.
+  Este arquivo usa `Popups` para mostrar o fluxo de confirmação de email
+  (método `esperandoConfirmacao`) — o popup gerencia o redirecionamento
+  posterior para a tela de login.
+*/
+import 'package:campus_guide/Features/auth/login.dart';
+import 'package:campus_guide/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'auth_service.dart';
 import 'popups.dart';
 
+/// Widget de cadastro.
+///
+/// - Valida matrícula, email e senha de forma local.
+/// - Ao enviar o formulário com sucesso chama `Popups.esperandoConfirmacao`
+///   que apresenta ao usuário o próximo passo (confirmação por email) e
+///   o redireciona para a tela de login quando aplicável.
 class Register extends StatefulWidget {
   const Register({super.key});
 
@@ -133,11 +148,9 @@ class _RegisterState extends State<Register> {
                                         style: TextStyle(fontSize: 12),
                                       ),
                                       onPressed: () {
-                                        Navigator.push(
+                                        Navigator.pushNamed(
                                           context,
-                                          MaterialPageRoute(
-                                            builder: (context) => const Login(),
-                                          ),
+                                          AppRoutes.login,
                                         );
                                       },
                                     ),
@@ -164,8 +177,9 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                             validator: (value) {
-                              if (value == null || value.isEmpty)
+                              if (value == null || value.isEmpty) {
                                 return 'digite sua matrícula';
+                              }
                               if (value.length < 4) return 'Matrícula inválida';
                               return null;
                             },
@@ -187,8 +201,9 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                             validator: (value) {
-                              if (value == null || value.isEmpty)
+                              if (value == null || value.isEmpty) {
                                 return 'digite o email';
+                              }
                               if (!value.contains('@')) return 'Email invalido';
                               return null;
                             },
@@ -210,10 +225,12 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                             validator: (value) {
-                              if (value == null || value.isEmpty)
+                              if (value == null || value.isEmpty) {
                                 return 'Digite a senha';
-                              if (value.length < 6)
+                              }
+                              if (value.length < 6) {
                                 return 'A senha deve ter pelo menos 6 caracteres';
+                              }
                               return null;
                             },
                           ),

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:campus_guide/Collections/institutional_db.dart';
-import 'package:campus_guide/Collections/user.dart';
+import 'institutional_db.dart';
+import 'user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;

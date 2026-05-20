@@ -1,8 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:campus_guide/login/register.dart';
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
-
+import 'package:campus_guide/routes/app_routes.dart';
+import 'package:campus_guide/Features/auth/register.dart';
+import 'package:campus_guide/Features/profile/profile_page.dart'; // import para tela de perfil
+/// Widget que representa a tela de login.
+///
+/// - Exibe os campos de `email` e `senha` (controladores: `emailController`,
+///   `senhalController`).
+/// - O botão de confirmação valida o formulário e executa a navegação.
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -39,7 +45,14 @@ class _LoginState extends State<Login> {
               backgroundColor: Colors.green,
             ),
           );
+
+          // Redireciona para a tela de perfil
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()),
+          );
         }
+        
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -160,8 +173,9 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           validator: (value) {
-                            if (value == null || value.isEmpty)
+                            if (value == null || value.isEmpty) {
                               return 'digite seu email';
+                            }
                             return null;
                           },
                         ),
@@ -182,8 +196,9 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             validator: (value) {
-                              if (value == null || value.isEmpty)
+                              if (value == null || value.isEmpty) {
                                 return 'Digite sua senha';
+                              }
                               return null;
                             },
                           ),
@@ -240,9 +255,7 @@ class _LoginState extends State<Login> {
                           ' Esqueci minha senha',
                           style: TextStyle(fontSize: 12),
                         ),
-                        onPressed: () {
-                          
-                        },
+                        onPressed: () {},
                       ),
                     ],
                   ),

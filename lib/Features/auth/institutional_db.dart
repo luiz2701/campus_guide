@@ -1,3 +1,8 @@
+/// Base institucional em memória usada apenas para validação local/testes.
+///
+/// Fornece um lookup simples por `matricula` e um método `validate` que
+/// checa se a matrícula existe e se o email informado corresponde ao
+/// registro institucional. Lança `InstitutionalException` em caso de erro.
 class InstitutionalDB {
   InstitutionalDB._();
 
@@ -21,9 +26,9 @@ class InstitutionalDB {
       role: 'aluno',
     ),
 
-    '1234887890': _InstitutionalRecord(
-      matricula: '1234887890',
-      email: 'jose.adantas@souunit.com.br',
+    '1234827891': _InstitutionalRecord(
+      matricula: '1234827891',
+      email: 'josealvesdantasjunior@gmail.com',
       name: 'José Júnior',
       role: 'aluno',
     ),
@@ -47,11 +52,20 @@ class InstitutionalDB {
     ),
   };
 
+  /// Retorna o registro institucional correspondente à `matricula`, ou `null`
+  /// se não encontrado.
+  ///
+  /// Observação: este método expõe um tipo privado (`_InstitutionalRecord`)
+  /// porque a base é interna ao pacote; para uso público preferir retornar
+  /// dados serializáveis ou converter para `AppUser`.
   static _InstitutionalRecord? lookup(String matricula) {
     return _records[matricula.trim().toUpperCase()] ??
         _records[matricula.trim()];
   }
 
+  /// Valida que a `matricula` existe e que o `email` corresponde ao registro
+  /// institucional. Retorna o registro encontrado em caso de sucesso ou lança
+  /// `InstitutionalException` em caso de erro.
   static _InstitutionalRecord validate({
     required String matricula,
     required String email,
@@ -70,6 +84,7 @@ class InstitutionalDB {
   }
 }
 
+/// Representação interna de um registro institucional.
 class _InstitutionalRecord {
   final String matricula;
   final String email;

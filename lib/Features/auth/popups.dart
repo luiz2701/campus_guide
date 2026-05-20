@@ -1,9 +1,16 @@
-import 'package:campus_guide/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:campus_guide/routes/app_routes.dart';
+import 'package:campus_guide/Features/auth/login.dart';
 class Popups {
+  /// Mostra um diálogo de aguardando confirmação de e-mail.
+  ///
+  /// - Exibe um diálogo não-dispensável que aguarda por um tempo (timer).
+  /// - Se o timer expirar, fecha o diálogo atual e abre o diálogo
+  ///   `naoEncontrado` para indicar falha na confirmação.
+  /// - Possui ação para reenviar/avançar que manipula a navegação para
+  ///   a tela de `Login` quando necessário.
   void esperandoConfirmacao(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
@@ -168,6 +175,10 @@ class Popups {
     );
   }
 
+  /// Mostra o diálogo indicando que o e-mail não foi confirmado.
+  ///
+  /// - O botão "Voltar" fecha o diálogo atual e redireciona para
+  ///   a tela de login via `Navigator.pushReplacementNamed(context, AppRoutes.login)`.
   void naoEncontrado(BuildContext context) {
     showDialog(
       context: context,
@@ -261,6 +272,10 @@ class Popups {
     );
   }
 
+  /// Mostra o diálogo indicando que o e-mail foi confirmado com sucesso.
+  ///
+  /// - O botão "Avançar" fecha o diálogo atual e redireciona para
+  ///   a tela de login via `Navigator.pushReplacementNamed(context, AppRoutes.login)`.
   void encontrado(BuildContext context) {
     showDialog(
       context: context,
