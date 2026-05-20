@@ -6,7 +6,6 @@
   (método `esperandoConfirmacao`) — o popup gerencia o redirecionamento
   posterior para a tela de login.
 */
-import 'package:campus_guide/Features/auth/login.dart';
 import 'package:campus_guide/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -148,7 +147,7 @@ class _RegisterState extends State<Register> {
                                         style: TextStyle(fontSize: 12),
                                       ),
                                       onPressed: () {
-                                        Navigator.pushNamed(
+                                        Navigator.pushReplacementNamed(
                                           context,
                                           AppRoutes.login,
                                         );

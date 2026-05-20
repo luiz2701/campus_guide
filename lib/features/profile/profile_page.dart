@@ -4,6 +4,7 @@ import '../../Components/buttons/primary_button.dart';
 import '../../Components/dialogs/logout_dialog.dart';
 //import '../../Components/navigation/bottom_nav_bar.dart';
 
+import 'package:campus_guide/Features/auth/auth_service.dart';
 import 'package:campus_guide/routes/app_routes.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -17,17 +18,29 @@ class _ProfilePageState extends State<ProfilePage> {
   int currentIndex = 3;
   bool showHistory = false;
 
+  Future<void> _logout() async {
+    await AuthService().deslogar();
+
+    if (!mounted) return;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.login,
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       //bottomNavigationBar: AppBottomNavBar(
-        //currentIndex: currentIndex,
-        //onTap: (index) {
-          //setState(() {
-            //currentIndex = index;
-         // });
-        //},
+      //currentIndex: currentIndex,
+      //onTap: (index) {
+      //setState(() {
+      //currentIndex = index;
+      // });
+      //},
       //),
       body: SafeArea(
         child: Padding(
@@ -155,12 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   iconColor: Colors.red,
                   showArrow: false,
                   onTap: () {
-                    LogoutDialog.show(
-                      context,
-                      onConfirm: () {
-                        print("Usuário saiu");
-                      },
-                    );
+                    LogoutDialog.show(context, onConfirm: _logout);
                   },
                 ),
                 const Divider(),
