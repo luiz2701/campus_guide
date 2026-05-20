@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../components/cards/event_details_card.dart';
+import '../../Components/cards/event_details_card.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final String title;

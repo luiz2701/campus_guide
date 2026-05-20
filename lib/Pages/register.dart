@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:campus_guide/Collections/institutional_db.dart';
+import 'package:campus_guide/Features/auth/institutional_db.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
