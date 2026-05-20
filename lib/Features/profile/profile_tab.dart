@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 
+import 'package:campus_guide/Features/auth/auth_service.dart';
+import 'package:campus_guide/components/dialogs/logout_dialog.dart';
+import 'package:campus_guide/routes/app_routes.dart';
+
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
+
+  Future<void> _logout(BuildContext context) async {
+    await AuthService().deslogar();
+
+    if (!context.mounted) return;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.login,
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,27 +28,11 @@ class ProfileTab extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.arrow_back_ios),
-                  ),
-                  const Expanded(
-                    child: Center(
-                      child: Text(
-                        "Meu Perfil",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 48),
-                ],
+              const Center(
+                child: Text(
+                  "Meu Perfil",
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+                ),
               ),
               const SizedBox(height: 40),
               Row(
@@ -61,7 +61,10 @@ class ProfileTab extends StatelessWidget {
                         const SizedBox(height: 24),
                         ElevatedButton(
                           onPressed: () async {
-                            await Navigator.pushNamed(context, '/edit-profile');
+                            await Navigator.pushNamed(
+                              context,
+                              AppRoutes.editProfile,
+                            );
                           },
                           child: const Text('Editar Perfil'),
                         ),
@@ -106,11 +109,23 @@ class ProfileTab extends StatelessWidget {
                     const Expanded(
                       child: Text(
                         'Semana da Computação',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
                 ),
+              ),
+              const Divider(),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.logout, color: Colors.red),
+                title: const Text('Sair', style: TextStyle(fontSize: 18)),
+                onTap: () {
+                  LogoutDialog.show(context, onConfirm: () => _logout(context));
+                },
               ),
               const Divider(),
             ],

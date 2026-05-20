@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'app_routes.dart';
+import 'package:campus_guide/components/cards/event_details_card.dart';
 import 'package:campus_guide/Features/profile/profile_page.dart';
 import 'package:campus_guide/Features/profile/edit_profile_page.dart';
 import 'package:campus_guide/Features/events/home_shell.dart';
-import 'package:campus_guide/Features/events/home.dart';
 import 'package:campus_guide/Features/auth/login.dart';
 import 'package:campus_guide/Features/auth/register.dart';
 
@@ -25,10 +25,21 @@ class AppRouter {
   /// `Route<dynamic>`. Para `AppRoutes.eventDetails` é esperado que
   /// `arguments` seja um `Map<String, dynamic>` contendo as chaves
   /// necessárias para popular `EventDetailsModal`.
-  static bool _isAuthenticated() => FirebaseAuth.instance.currentUser != null;
-
   static Route<dynamic> _redirectToLogin(RouteSettings settings) {
     return MaterialPageRoute(builder: (_) => const Login());
+  }
+
+  static List<Map<String, String>> _speakersFromArgs(dynamic value) {
+    if (value is! List) return [];
+
+    return value
+        .whereType<Map>()
+        .map(
+          (speaker) => speaker.map(
+            (key, value) => MapEntry(key.toString(), value.toString()),
+          ),
+        )
+        .toList();
   }
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -36,15 +47,21 @@ class AppRouter {
 
     switch (settings.name) {
       case AppRoutes.home:
-        if (user != null) return MaterialPageRoute(builder: (_) => const HomeShell());
+        if (user != null) {
+          return MaterialPageRoute(builder: (_) => const HomeShell());
+        }
         return _redirectToLogin(settings);
 
       case AppRoutes.profile:
-        if (user != null) return MaterialPageRoute(builder: (_) => const ProfilePage());
+        if (user != null) {
+          return MaterialPageRoute(builder: (_) => const ProfilePage());
+        }
         return _redirectToLogin(settings);
 
       case AppRoutes.editProfile:
-        if (user != null) return MaterialPageRoute(builder: (_) => const EditProfilePage());
+        if (user != null) {
+          return MaterialPageRoute(builder: (_) => const EditProfilePage());
+        }
         return _redirectToLogin(settings);
 
       case AppRoutes.eventDetails:
@@ -55,13 +72,16 @@ class AppRouter {
           return MaterialPageRoute(
             builder: (_) => Scaffold(
               appBar: AppBar(title: const Text('Detalhes do evento')),
-              body: EventDetailsModal(
-                title: args?['title'] ?? '',
-                description: args?['description'] ?? '',
-                location: args?['location'] ?? '',
-                speakers: (args?['speakers'] as List<Map<String, String>>?) ?? [],
-                remainingVacancies: args?['remainingVacancies'] ?? 0,
-                isOpen: args?['isOpen'] ?? false,
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: EventDetailsCard(
+                  title: args?['title'] ?? '',
+                  description: args?['description'] ?? '',
+                  location: args?['location'] ?? '',
+                  speakers: _speakersFromArgs(args?['speakers']),
+                  remainingVacancies: args?['remainingVacancies'] ?? 0,
+                  isOpen: args?['isOpen'] ?? false,
+                ),
               ),
             ),
           );
@@ -69,12 +89,15 @@ class AppRouter {
         return _redirectToLogin(settings);
 
       case AppRoutes.login:
-        // If already authenticated, redirect to ProfilePage
-        if (user != null) return MaterialPageRoute(builder: (_) => const ProfilePage());
+        if (user != null) {
+          return MaterialPageRoute(builder: (_) => const HomeShell());
+        }
         return MaterialPageRoute(builder: (_) => const Login());
 
       case AppRoutes.register:
-        if (user != null) return MaterialPageRoute(builder: (_) => const ProfilePage());
+        if (user != null) {
+          return MaterialPageRoute(builder: (_) => const HomeShell());
+        }
         return MaterialPageRoute(builder: (_) => const Register());
 
       default:

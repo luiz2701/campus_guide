@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
 import 'package:campus_guide/routes/app_routes.dart';
-import 'package:campus_guide/Features/auth/register.dart';
-import 'package:campus_guide/Features/profile/profile_page.dart'; // import para tela de perfil
+
 /// Widget que representa a tela de login.
 ///
 /// - Exibe os campos de `email` e `senha` (controladores: `emailController`,
@@ -46,13 +44,12 @@ class _LoginState extends State<Login> {
             ),
           );
 
-          // Redireciona para a tela de perfil
-          Navigator.pushReplacement(
+          Navigator.pushNamedAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const ProfilePage()),
+            AppRoutes.home,
+            (route) => false,
           );
         }
-        
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -144,12 +141,9 @@ class _LoginState extends State<Login> {
                                       style: TextStyle(fontSize: 12),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(
+                                      Navigator.pushNamed(
                                         context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Register(),
-                                        ),
+                                        AppRoutes.register,
                                       );
                                     },
                                   ),

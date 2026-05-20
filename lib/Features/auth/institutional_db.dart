@@ -32,10 +32,10 @@ class InstitutionalDB {
       name: 'José Júnior',
       role: 'aluno',
     ),
-    '20210003': _InstitutionalRecord(
-      matricula: '20210003',
-      email: 'carlos.mendes@instituicao.edu.br',
-      name: 'Carlos Mendes',
+    '1234827211': _InstitutionalRecord(
+      matricula: '1234827211',
+      email: 'davireis909@gmail.com',
+      name: 'Davi Reis',
       role: 'aluno',
     ),
     'DOC001': _InstitutionalRecord(
