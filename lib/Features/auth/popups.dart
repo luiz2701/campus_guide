@@ -1,8 +1,24 @@
+/*
+  Utilitários de diálogos usados no fluxo de autenticação/registro.
+
+  Contém diálogos reutilizáveis que exibem mensagens ao usuário durante o
+  processo de confirmação de e-mail e navegam para a tela de `Login`
+  quando apropriado. Todos os diálogos aqui são exibidos via `showDialog`
+  e, por padrão, não são `barrierDismissible` (o usuário não pode fechar com
+  toque fora) — o controle de fechamento é feito programaticamente.
+*/
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:campus_guide/routes/app_routes.dart';
 
 class Popups {
+  /// Mostra um diálogo de aguardando confirmação de e-mail.
+  ///
+  /// - Exibe um diálogo não-dispensável que aguarda por um tempo (timer).
+  /// - Se o timer expirar, fecha o diálogo atual e abre o diálogo
+  ///   `naoEncontrado` para indicar falha na confirmação.
+  /// - Possui ação para reenviar/avançar que manipula a navegação para
+  ///   a tela de `Login` quando necessário.
   void esperandoConfirmacao(BuildContext context) {
     showDialog(
       context: context,
@@ -140,6 +156,10 @@ class Popups {
     );
   }
 
+  /// Mostra o diálogo indicando que o e-mail não foi confirmado.
+  ///
+  /// - O botão "Voltar" fecha o diálogo atual e redireciona para
+  ///   a tela de login via `Navigator.pushReplacementNamed(context, AppRoutes.login)`.
   void naoEncontrado(BuildContext context) {
     showDialog(
       context: context,
@@ -251,6 +271,10 @@ class Popups {
     );
   }
 
+  /// Mostra o diálogo indicando que o e-mail foi confirmado com sucesso.
+  ///
+  /// - O botão "Avançar" fecha o diálogo atual e redireciona para
+  ///   a tela de login via `Navigator.pushReplacementNamed(context, AppRoutes.login)`.
   void encontrado(BuildContext context) {
     showDialog(
       context: context,
