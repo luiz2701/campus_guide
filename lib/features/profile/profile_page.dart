@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Components/buttons/primary_button.dart';
 import '../../Components/dialogs/logout_dialog.dart';
-import '../../Components/navigation/bottom_nav_bar.dart';
+//import '../../Components/navigation/bottom_nav_bar.dart';
 
 import 'package:campus_guide/routes/app_routes.dart';
 
@@ -21,14 +21,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: AppBottomNavBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-      ),
+      //bottomNavigationBar: AppBottomNavBar(
+        //currentIndex: currentIndex,
+        //onTap: (index) {
+          //setState(() {
+            //currentIndex = index;
+         // });
+        //},
+      //),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
