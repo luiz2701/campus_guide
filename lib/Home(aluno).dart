@@ -38,6 +38,7 @@ class StudentHomeScreen extends StatelessWidget {
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: 0,
         onTap: (index) {},
+        showCreateButton: false,
       ),
     );
   }
