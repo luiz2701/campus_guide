@@ -9,6 +9,7 @@
     autenticação aqui, se necessário, para proteger rotas privadas.
 */
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'app_routes.dart';
 import 'package:campus_guide/Features/profile/profile_page.dart';
@@ -24,32 +25,49 @@ class AppRouter {
   /// `Route<dynamic>`. Para `AppRoutes.eventDetails` é esperado que
   /// `arguments` seja um `Map<String, dynamic>` contendo as chaves
   /// necessárias para popular `EventDetailsPage`.
+  static bool _isAuthenticated() => FirebaseAuth.instance.currentUser != null;
+
+  static Route<dynamic> _redirectToLogin(RouteSettings settings) {
+    return MaterialPageRoute(builder: (_) => const Login());
+  }
+
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    final user = FirebaseAuth.instance.currentUser;
+
     switch (settings.name) {
       case AppRoutes.home:
-        return MaterialPageRoute(builder: (_) => const ProfilePage());
+        if (user != null) return MaterialPageRoute(builder: (_) => const ProfilePage());
+        return _redirectToLogin(settings);
 
       case AppRoutes.profile:
-        return MaterialPageRoute(builder: (_) => const ProfilePage());
+        if (user != null) return MaterialPageRoute(builder: (_) => const ProfilePage());
+        return _redirectToLogin(settings);
 
       case AppRoutes.editProfile:
-        return MaterialPageRoute(builder: (_) => const EditProfilePage());
+        if (user != null) return MaterialPageRoute(builder: (_) => const EditProfilePage());
+        return _redirectToLogin(settings);
 
       case AppRoutes.eventDetails:
-        final args = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute(
-          builder: (_) => EventDetailsPage(
-            title: args?['title'] ?? '',
-            description: args?['description'] ?? '',
-            location: args?['location'] ?? '',
-            speakers: (args?['speakers'] as List<Map<String, String>>?) ?? [],
-          ),
-        );
+        if (user != null) {
+          final args = settings.arguments as Map<String, dynamic>?;
+          return MaterialPageRoute(
+            builder: (_) => EventDetailsPage(
+              title: args?['title'] ?? '',
+              description: args?['description'] ?? '',
+              location: args?['location'] ?? '',
+              speakers: (args?['speakers'] as List<Map<String, String>>?) ?? [],
+            ),
+          );
+        }
+        return _redirectToLogin(settings);
 
       case AppRoutes.login:
+        // If already authenticated, redirect to ProgilePage
+        if (user != null) return MaterialPageRoute(builder: (_) => const ProfilePage());
         return MaterialPageRoute(builder: (_) => const Login());
 
       case AppRoutes.register:
+        if (user != null) return MaterialPageRoute(builder: (_) => const ProfilePage());
         return MaterialPageRoute(builder: (_) => const Register());
 
       default:
