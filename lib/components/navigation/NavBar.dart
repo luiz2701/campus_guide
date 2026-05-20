@@ -1,6 +1,4 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
-
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'main.dart';
-
 import "components/navigation/NavBar.dart";
 import 'components/cards/EventCard.dart';
 
-class TeacherHomeScreen extends StatelessWidget {
-  const TeacherHomeScreen({super.key});
+class StudentHomeScreen extends StatelessWidget {
+  const StudentHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +14,7 @@ class TeacherHomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Olá Docente', style: TextStyle(color: Colors.white)),
+            const Text('Olá Aluno', style: TextStyle(color: Colors.white)),
             const Text(
               "Eventos",
               style: TextStyle(
