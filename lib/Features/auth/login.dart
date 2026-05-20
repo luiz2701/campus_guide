@@ -1,6 +1,23 @@
+/*
+  Tela de login do aplicativo.
+
+  Contém o formulário de autenticação (email + senha) usado apenas como
+  placeholder/local para demonstração. Valida os campos localmente e, em caso
+  de sucesso, navega para a rota inicial do aplicativo usando
+  `Navigator.pushReplacementNamed(context, AppRoutes.home)`.
+
+  Uso:
+  - Navegar para a tela de registro: `Navigator.pushNamed(context, AppRoutes.register)`
+  - Após login bem-sucedido: `Navigator.pushReplacementNamed(context, AppRoutes.home)`
+*/
 import 'package:campus_guide/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
+/// Widget que representa a tela de login.
+///
+/// - Exibe os campos de `email` e `senha` (controladores: `emailController`,
+///   `senhalController`).
+/// - O botão de confirmação valida o formulário e executa a navegação.
 class Login extends StatefulWidget {
   const Login({super.key});
 
