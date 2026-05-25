@@ -7,6 +7,46 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  Future<AppUser?> buscarUsuarioAtual() async {
+    final firebaseUser = _auth.currentUser;
+
+    if (firebaseUser == null) return null;
+
+    final doc = await _db.collection('usuarios').doc(firebaseUser.uid).get();
+
+    if (doc.exists && doc.data() != null) {
+      return AppUser.fromMap(doc.id, doc.data()!);
+    }
+
+    return AppUser(
+      id: firebaseUser.uid,
+      name: firebaseUser.displayName ?? '',
+      email: firebaseUser.email ?? '',
+      matricula: '',
+      role: '',
+    );
+  }
+
+  Future<void> atualizarPerfil({required String name}) async {
+    final firebaseUser = _auth.currentUser;
+    final trimmedName = name.trim();
+
+    if (firebaseUser == null) {
+      throw Exception('Usuário não autenticado.');
+    }
+
+    if (trimmedName.isEmpty) {
+      throw Exception('Informe um nome válido.');
+    }
+
+    await _db.collection('usuarios').doc(firebaseUser.uid).set({
+      'name': trimmedName,
+      'email': firebaseUser.email ?? '',
+    }, SetOptions(merge: true));
+
+    await firebaseUser.updateDisplayName(trimmedName);
+  }
+
   Future<void> cadastrarUsuario({
     required String matricula,
     required String email,
