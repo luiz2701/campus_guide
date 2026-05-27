@@ -25,12 +25,17 @@ class InstitutionalDB {
       name: 'José Alves',
       role: 'aluno',
     ),
-
     '1234827891': _InstitutionalRecord(
       matricula: '1234827891',
       email: 'josealvesdantasjunior@gmail.com',
       name: 'José Júnior',
       role: 'aluno',
+    ),
+    '1222190106': _InstitutionalRecord(
+      matricula: '1222190106',
+      email: 'kauarodrigo1@gmail.com',
+      name: 'Kauã Rodrigo',
+      role: 'docente',
     ),
     '1234827211': _InstitutionalRecord(
       matricula: '1234827211',
