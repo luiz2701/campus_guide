@@ -87,24 +87,15 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.arrow_back_ios),
-                    ),
-                    const Expanded(
-                      child: Center(
-                        child: Text(
-                          "Meu Perfil",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                    const Spacer(),
+                    const Text(
+                      "Meu Perfil",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    const Spacer(),
                   ],
                 ),
                 const SizedBox(height: 40),

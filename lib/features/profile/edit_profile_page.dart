@@ -118,6 +118,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Editar Perfil"),
+        centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -149,9 +150,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               onTap: () {
                                 ErrorDialog.show(
                                   context,
-                                  title: "Foto indisponível",
-                                  message:
-                                      "A alteração de foto ainda não foi implementada.",
+                                  title: "ainda não",
+                                  message: "preciso ver isso depois",
                                 );
                               },
                               child: Container(
@@ -210,7 +210,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      "Senha Atual",
+                      "Senha",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
