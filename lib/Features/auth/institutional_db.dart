@@ -55,6 +55,12 @@ class InstitutionalDB {
       name: 'Pedro Costa',
       role: 'docente',
     ),
+    '1231110624': _InstitutionalRecord(
+      matricula: '1231110624',
+      email: 'luiz.armando@unit.com.br',
+      name: 'Luiz Armando',
+      role: 'docente',
+    ),
   };
 
   /// Retorna o registro institucional correspondente à `matricula`, ou `null`
