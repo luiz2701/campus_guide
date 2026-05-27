@@ -8,7 +8,7 @@ import '../../crudEvent/event_controller.dart';
   create_page.dart
   - Aba "Criar Evento" do HomeShell.
   - Formulario integrado com EventController sem depender de Provider.
-  - Campos: Nome, Dia, Hora, Local, Vagas, Descricao, Curso, Periodo.
+  - Campos: titulo, Dia, Hora, Local, Vagas, Descricao, Curso, Periodo.
 */
 
 class CreatePage extends StatefulWidget {
@@ -21,7 +21,7 @@ class CreatePage extends StatefulWidget {
 class _CreatePageState extends State<CreatePage> {
   final _controller = EventController();
 
-  final _nomeCtrl = TextEditingController();
+  final _tituloCtrl = TextEditingController();
   final _diaCtrl = TextEditingController();
   final _horaCtrl = TextEditingController();
   final _localCtrl = TextEditingController();
@@ -45,7 +45,7 @@ class _CreatePageState extends State<CreatePage> {
     _controller.removeListener(_atualizarTela);
     _controller.dispose();
 
-    _nomeCtrl.dispose();
+    _tituloCtrl.dispose();
     _diaCtrl.dispose();
     _horaCtrl.dispose();
     _localCtrl.dispose();
@@ -86,7 +86,7 @@ class _CreatePageState extends State<CreatePage> {
   }
 
   Future<void> _publicar() async {
-    if (_nomeCtrl.text.trim().isEmpty ||
+    if (_tituloCtrl.text.trim().isEmpty ||
         _diaCtrl.text.trim().isEmpty ||
         _horaCtrl.text.trim().isEmpty ||
         _localCtrl.text.trim().isEmpty ||
@@ -124,7 +124,7 @@ class _CreatePageState extends State<CreatePage> {
     );
 
     final ok = await _controller.criarEvento(
-      titulo: _nomeCtrl.text.trim(),
+      titulo: _tituloCtrl.text.trim(),
       descricao: _descricaoCtrl.text.trim(),
       dataInicio: dataInicio,
       dataFim: dataInicio.add(const Duration(hours: 2)),
@@ -137,7 +137,7 @@ class _CreatePageState extends State<CreatePage> {
     if (!mounted) return;
 
     if (ok) {
-      _nomeCtrl.clear();
+      _tituloCtrl.clear();
       _diaCtrl.clear();
       _horaCtrl.clear();
       _localCtrl.clear();
@@ -184,7 +184,7 @@ class _CreatePageState extends State<CreatePage> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                AppTextField(hint: 'Nome', controller: _nomeCtrl),
+                AppTextField(hint: 'Título', controller: _tituloCtrl),
                 const SizedBox(height: 14),
                 _CampoComIcone(
                   hint: 'Dia',
