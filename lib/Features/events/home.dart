@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:campus_guide/crudEvent/event_controller.dart';
 import 'package:campus_guide/crudEvent/event_model.dart';
+import 'package:campus_guide/features/events/edit_event_page.dart';
 
 // HOME PAGE
 // Conectada ao EventController — carrega eventos reais do Firestore.
@@ -151,8 +152,19 @@ class _HomePageState extends State<HomePage> {
       builder: (_) => _EventDetailsModal(
         evento: evento,
         controller: _controller,
+        onEditar: () => _abrirEdicao(evento),
       ),
     );
+  }
+
+  Future<void> _abrirEdicao(EventModel evento) async {
+    final atualizado = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => EditEventPage(evento: evento)),
+    );
+    if (atualizado == true) {
+      _controller.carregarEventos();
+    }
   }
 }
 
@@ -261,10 +273,12 @@ class _EventListCard extends StatelessWidget {
 class _EventDetailsModal extends StatelessWidget {
   final EventModel evento;
   final EventController controller;
+  final VoidCallback onEditar;
 
   const _EventDetailsModal({
     required this.evento,
     required this.controller,
+    required this.onEditar,
   });
 
   @override
@@ -407,7 +421,8 @@ class _EventDetailsModal extends StatelessWidget {
                       child: _PrimaryButton(
                         label: 'Editar evento',
                         onPressed: () {
-                          // TODO: navegar para tela de edição
+                          Navigator.pop(context);
+                          onEditar();
                         },
                       ),
                     ),
@@ -493,7 +508,7 @@ class _SpeakerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = ministrante['image'] ?? '';
+    final imageUrl = ministrante['imagem'] ?? '';
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Row(
@@ -508,7 +523,7 @@ class _SpeakerTile extends StatelessWidget {
                 : null,
           ),
           const SizedBox(width: 16),
-          Text(ministrante['name'] ?? '',
+          Text(ministrante['nome'] ?? '',
               style: const TextStyle(fontSize: 16)),
         ],
       ),
