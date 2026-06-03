@@ -6,17 +6,6 @@ import 'create_page.dart';
 import 'my_events_page.dart';
 import 'package:campus_guide/Features/profile/profile_tab.dart';
 
-/*
-  home_shell.dart
-  - Shell principal da área de eventos / Home do aplicativo.
-  - Responsável por renderizar as 4 abas principais usando um `IndexedStack`:
-    1) Feed Home (placeholder)
-    2) Criar Evento (CreatePage)
-    3) Lista de Eventos (EventsListPage)
-    4) Perfil (ProfileTab)
-  - Mantém o estado das abas com `IndexedStack` e usa `AppBottomNavBar`.
-*/
-
 /// Container que mantém as principais abas e a `AppBottomNavBar`.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -39,10 +28,7 @@ class _HomeShellState extends State<HomeShell> {
 
     return Scaffold(
       // `IndexedStack` preserva o estado de cada aba ao alternar.
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      ),
+      body: IndexedStack(index: currentIndex, children: pages),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: currentIndex,
         onTap: (i) => setState(() => currentIndex = i),
