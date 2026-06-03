@@ -18,6 +18,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  static const String _profileImageAsset = 'imagens/Icone_perfil.png';
+
   final AuthService _authService = AuthService();
 
   late Future<AppUser?> _userFuture;
@@ -179,14 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 140,
-              height: 140,
-              decoration: const BoxDecoration(
-                color: Color(0xFF0D4DB3),
-                shape: BoxShape.circle,
-              ),
-            ),
+            _buildAvatar(),
             const SizedBox(width: 24),
             Expanded(
               child: Column(
@@ -240,6 +235,19 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAvatar() {
+    return Container(
+      width: 140,
+      height: 140,
+      decoration: const BoxDecoration(
+        color: Color(0xFF0D4DB3),
+        shape: BoxShape.circle,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(_profileImageAsset, fit: BoxFit.cover),
     );
   }
 

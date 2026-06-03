@@ -18,6 +18,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  static const String _profileImageAsset = 'imagens/Icone_perfil.png';
+
   final AuthService _authService = AuthService();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController matriculaController = TextEditingController();
@@ -108,6 +110,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  void _showFixedPhotoMessage() {
+    ErrorDialog.show(
+      context,
+      title: "Foto padrão",
+      message: "A foto do perfil é fixa nesta versão do aplicativo.",
+    );
+  }
+
   String _cleanError(Object error) {
     return error.toString().replaceFirst('Exception: ', '');
   }
@@ -135,25 +145,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          Container(
-                            width: 140,
-                            height: 140,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF0D4DB3),
-                              shape: BoxShape.circle,
-                            ),
-                          ),
+                          _buildAvatar(),
                           Positioned(
                             bottom: 4,
                             right: -2,
                             child: GestureDetector(
-                              onTap: () {
-                                ErrorDialog.show(
-                                  context,
-                                  title: "ainda não",
-                                  message: "preciso ver isso depois",
-                                );
-                              },
+                              onTap: saving ? null : _showFixedPhotoMessage,
                               child: Container(
                                 width: 42,
                                 height: 42,
@@ -232,6 +229,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
             ),
+    );
+  }
+
+  Widget _buildAvatar() {
+    return Container(
+      width: 140,
+      height: 140,
+      decoration: const BoxDecoration(
+        color: Color(0xFF0D4DB3),
+        shape: BoxShape.circle,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(_profileImageAsset, fit: BoxFit.cover),
     );
   }
 }

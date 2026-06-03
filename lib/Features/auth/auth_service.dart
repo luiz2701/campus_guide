@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'institutional_db.dart';
 import 'user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  static const Duration _requestTimeout = Duration(seconds: 25);
 
   Future<AppUser?> buscarUsuarioAtual() async {
     final firebaseUser = _auth.currentUser;
@@ -39,12 +43,16 @@ class AuthService {
       throw Exception('Informe um nome válido.');
     }
 
-    await _db.collection('usuarios').doc(firebaseUser.uid).set({
-      'name': trimmedName,
-      'email': firebaseUser.email ?? '',
-    }, SetOptions(merge: true));
+    await _db
+        .collection('usuarios')
+        .doc(firebaseUser.uid)
+        .set({
+          'name': trimmedName,
+          'email': firebaseUser.email ?? '',
+        }, SetOptions(merge: true))
+        .timeout(_requestTimeout);
 
-    await firebaseUser.updateDisplayName(trimmedName);
+    await firebaseUser.updateDisplayName(trimmedName).timeout(_requestTimeout);
   }
 
   Future<void> cadastrarUsuario({
