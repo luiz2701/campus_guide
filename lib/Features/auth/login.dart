@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
                   alignment: Alignment.topCenter,
                   child: Image.asset(
                     'imagens/CampusGuide_png.png',
-                    width: 250,
+                    width: 400,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                 alignment: Alignment.topCenter,
                 width: 350,
                 height: 600,
-                padding: const EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.all(0),
                 child: Form(
                   key: _formkey,
                   child: Column(
@@ -130,9 +130,11 @@ class _LoginState extends State<Login> {
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Text(
                                   'Entrar',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.displayLarge,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
@@ -143,7 +145,7 @@ class _LoginState extends State<Login> {
                                 children: [
                                   const Text(
                                     'Não tem uma conta?',
-                                    style: TextStyle(fontSize: 12),
+                                    style: TextStyle(fontSize: 14),
                                   ),
                                   // Botão para ir à tela de registro.
                                   TextButton(
@@ -161,8 +163,8 @@ class _LoginState extends State<Login> {
                                       ),
                                     ),
                                     child: const Text(
-                                      'inscreva-se',
-                                      style: TextStyle(fontSize: 12),
+                                      'Inscreva-se',
+                                      style: TextStyle(fontSize: 14),
                                     ),
                                     onPressed: () {
                                       Navigator.pushNamed(
@@ -182,13 +184,13 @@ class _LoginState extends State<Login> {
                       // Observação: Opacidade está baixa (0.2) — verificar se é
                       // intenção de design ou bug de estilo.
                       Opacity(
-                        opacity: 0.2,
+                        opacity: 0.6,
                         child: TextFormField(
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: 'Email (Institucional)',
-                            labelStyle: const TextStyle(fontSize: 12),
+                            labelStyle: const TextStyle(fontSize: 14),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -206,13 +208,13 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12, top: 12),
                         child: Opacity(
-                          opacity: 0.2,
+                          opacity: 0.6,
                           child: TextFormField(
                             controller: senhalController,
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'Senha',
-                              labelStyle: const TextStyle(fontSize: 12),
+                              labelStyle: const TextStyle(fontSize: 14),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
