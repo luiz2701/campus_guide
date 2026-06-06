@@ -1,61 +1,63 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 import 'institutional_db.dart';
 import 'user.dart';
 
+
 //tentei fazer alterações aqui para que depois que o usuário verifica-se
-//o email o popup de encontrado aparece, mas acho que devido a limitações do firebase
+//o email o popup de encontrado aparece, mas acho que devido a limitações do firebase 
 //isso não está sendo posivel no momento, por isso vc pode deixar esse arquivo na main sem as auterações
 //que fiz
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  static const Duration _requestTimeout = Duration(seconds: 25);
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    hostedDomain: "souunit.com.br",
-  );
+  Future<AppUser?> buscarUsuarioAtual() async {
+    final firebaseUser = _auth.currentUser;
 
-  // LOGIN COM GOOGLE
-  Future<User?> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (firebaseUser == null) return null;
 
-    if (googleUser == null) return null;
+    final doc = await _db.collection('usuarios').doc(firebaseUser.uid).get();
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final UserCredential userCredential = await _auth.signInWithCredential(
-      credential,
-    );
-
-    final User? user = userCredential.user;
-
-    if (user == null ||
-        user.email == null ||
-        !user.email!.endsWith("@souunit.com.br")) {
-      await _auth.signOut();
-      await _googleSignIn.signOut();
-      return null;
+    if (doc.exists && doc.data() != null) {
+      return AppUser.fromMap(doc.id, doc.data()!);
     }
 
-    final doc = await _db.collection('usuarios').doc(user.uid).get();
+    return AppUser(
+      id: firebaseUser.uid,
+      name: firebaseUser.displayName ?? '',
+      email: firebaseUser.email ?? '',
+      matricula: '',
+      role: '',
+    );
+  }
 
-    if (!doc.exists) {
-      await _db.collection('usuarios').doc(user.uid).set({
-        'email': user.email,
-        'name': user.displayName ?? '',
-        'matricula': user.email,
-        'role': 'student',
-      });
+  Future<void> atualizarPerfil({required String name}) async {
+    final firebaseUser = _auth.currentUser;
+    final trimmedName = name.trim();
+
+    if (firebaseUser == null) {
+      throw Exception('Usuário não autenticado.');
     }
 
-    return user;
+    if (trimmedName.isEmpty) {
+      throw Exception('Informe um nome válido.');
+    }
+
+    await _db
+        .collection('usuarios')
+        .doc(firebaseUser.uid)
+        .set({
+          'name': trimmedName,
+          'email': firebaseUser.email ?? '',
+        }, SetOptions(merge: true))
+        .timeout(_requestTimeout);
+
+    await firebaseUser.updateDisplayName(trimmedName).timeout(_requestTimeout);
   }
 
   Future<void> cadastrarUsuario({
@@ -99,7 +101,7 @@ class AuthService {
       // Envia o e-mail de verificação
       await firebaseUser.sendEmailVerification();
 
-      // LOGOUT FORÇADO: O usuário é deslogado logo após o cadastro
+      // LOGOUT FORÇADO: O usuário é deslogado logo após o cadastro 
       // para que ele só acesse o app após clicar no link do e-mail.
       await _auth.signOut();
     }
@@ -119,25 +121,22 @@ class AuthService {
     if (user != null) {
       // 1. RECARREGA o estado do usuário do servidor Firebase
       await user.reload();
-
+      
       // 2. Atualiza a referência local após o recarregamento
       user = _auth.currentUser;
 
       // 3. TRAVA DE SEGURANÇA: Se não estiver verificado, desloga e impede o login
       if (!user!.emailVerified) {
         await _auth.signOut();
-
         throw Exception(
           'Por favor, confirme seu e-mail institucional para ativar a conta antes de fazer login.',
         );
       }
     }
-
     return user;
   }
 
   Future<void> deslogar() async {
-    await _googleSignIn.signOut();
     await _auth.signOut();
   }
 }

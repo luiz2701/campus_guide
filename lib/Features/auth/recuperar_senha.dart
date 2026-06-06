@@ -42,7 +42,7 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
                   fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(
+              Container(
                 width: 350,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +176,7 @@ class _AguardandoRecuperacaoState extends State<AguardandoRecuperacao> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: SizedBox(
+        child: Container(
           width: 300,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

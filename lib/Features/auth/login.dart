@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'auth_service.dart';
 import 'package:campus_guide/routes/app_routes.dart';
 import 'recuperar_senha.dart';
-
 /// Tela de login do aplicativo.
 ///
 /// - Usa um `Form` com validação simples para `email` e `senha`.
@@ -83,46 +82,6 @@ class _LoginState extends State<Login> {
             _carregando = false;
           });
         }
-      }
-    }
-  }
-
-  void _loginGoogle() async {
-    setState(() {
-      _carregando = true;
-    });
-
-    try {
-      final user = await _authService.signInWithGoogle();
-
-      if (user != null && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login Google efetuado com sucesso!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRoutes.home,
-          (route) => false,
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString().replaceAll('Exception', '')),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _carregando = false;
-        });
       }
     }
   }
@@ -306,17 +265,6 @@ class _LoginState extends State<Login> {
                         ),
                       ),
 
-                      const SizedBox(height: 12),
-
-                      SizedBox(
-                        width: 500,
-                        height: 45,
-                        child: OutlinedButton.icon(
-                          onPressed: _carregando ? null : _loginGoogle,
-                          icon: const Icon(Icons.login),
-                          label: const Text('Entrar com Google'),
-                        ),
-                      ),
                       // Link para recuperação de senha (ainda sem implementação).
                       TextButton(
                         style: TextButton.styleFrom(
