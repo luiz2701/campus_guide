@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 //import 'package:campus_guide/routes/app_routes.dart';
-import 'package:campus_guide/Features/auth/login.dart';
+import 'package:campus_guide/features/auth/login.dart';
 
 class Popups {
   /// Mostra um diálogo de aguardando confirmação de e-mail.
