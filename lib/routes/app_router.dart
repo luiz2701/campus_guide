@@ -12,11 +12,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'app_routes.dart';
 import 'package:campus_guide/components/cards/event_details_card.dart';
-import 'package:campus_guide/Features/profile/profile_page.dart';
-import 'package:campus_guide/Features/profile/edit_profile_page.dart';
-import 'package:campus_guide/Features/events/home_shell.dart';
-import 'package:campus_guide/Features/auth/login.dart';
-import 'package:campus_guide/Features/auth/register.dart';
+import 'package:campus_guide/features/profile/profile_page.dart';
+import 'package:campus_guide/features/profile/edit_profile_page.dart';
+import 'package:campus_guide/features/events/home_shell.dart';
+import 'package:campus_guide/features/auth/login.dart';
+import 'package:campus_guide/features/auth/register.dart';
 
 class AppRouter {
   /// Gera as rotas usadas pelo `MaterialApp.onGenerateRoute`.

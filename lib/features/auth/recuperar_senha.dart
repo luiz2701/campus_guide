@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:campus_guide/Features/auth/login.dart';
+import 'package:campus_guide/features/auth/login.dart';
 
 // 1. TELA DE INÍCIO: DIGITAR E-MAIL
 class RecuperarSenha extends StatefulWidget {

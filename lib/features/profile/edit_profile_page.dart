@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:campus_guide/Features/auth/auth_service.dart';
-import 'package:campus_guide/Features/auth/user.dart';
+import 'package:campus_guide/features/auth/auth_service.dart';
+import 'package:campus_guide/features/auth/user.dart';
 import 'package:campus_guide/components/buttons/primary_button.dart';
 import 'package:campus_guide/components/dialogs/error_dialog.dart';
 import 'package:campus_guide/components/dialogs/success_dialog.dart';
