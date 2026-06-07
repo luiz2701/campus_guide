@@ -36,10 +36,6 @@ class EventRepository {
     await _col.doc(evento.id).update(evento.toMap());
   }
 
-  Future<void> deletar(String id) async {
-    await _col.doc(id).delete();
-  }
-
   Future<void> cancelar(String id) async {
     await _col.doc(id).update({
       'status': EventStatus.cancelado.name,

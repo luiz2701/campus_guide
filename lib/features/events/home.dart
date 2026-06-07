@@ -148,10 +148,18 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    if (_controller.eventos.isEmpty) {
+    // Regras de negócio de visibilidade:
+    //  - Eventos ativos: sempre visíveis.
+    //  - Eventos encerrados/cancelados: visíveis por até 4 dias após dataFim.
+    //  - Demais: ocultos da listagem pública (preservados no Firestore).
+    final eventosVisiveis = _controller.eventos
+        .where((e) => e.isVisivelNaListagem)
+        .toList();
+
+    if (eventosVisiveis.isEmpty) {
       return const Center(
         child: Text(
-          'Nenhum evento cadastrado.',
+          'Nenhum evento disponível no momento.',
           style: TextStyle(color: Colors.white70, fontSize: 15),
         ),
       );
@@ -162,9 +170,9 @@ class _HomePageState extends State<HomePage> {
       color: const Color(0xFF1535C9),
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        itemCount: _controller.eventos.length,
+        itemCount: eventosVisiveis.length,
         itemBuilder: (context, index) {
-          final evento = _controller.eventos[index];
+          final evento = eventosVisiveis[index];
           return _EventListCard(
             evento: evento,
             labelData: _labelData(evento.dataInicio),
@@ -375,11 +383,13 @@ class _EventDetailsModal extends StatelessWidget {
                     if (isDonoDocente)
                       IconButton(
                         icon: const Icon(
-                          Icons.delete_outline_rounded,
+                          Icons.cancel_outlined,
                           color: Colors.red,
                           size: 26,
                         ),
-                        onPressed: () => _showDeleteDialog(context),
+                        // Eventos não são deletados — apenas cancelados,
+                        // para preservar o histórico de participação.
+                        onPressed: () => _showCancelDialog(context),
                       )
                     else
                       const SizedBox(width: 48),
@@ -403,11 +413,11 @@ class _EventDetailsModal extends StatelessWidget {
                                 style: TextStyle(fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                evento.status == EventStatus.cancelado
+                                evento.statusEfetivo == EventStatus.cancelado
                                     ? 'Cancelado'
                                     : 'Aberto',
                                 style: TextStyle(
-                                  color: evento.status == EventStatus.cancelado
+                                  color: evento.statusEfetivo == EventStatus.cancelado
                                       ? Colors.red
                                       : Colors.green,
                                   fontWeight: FontWeight.w600,
@@ -513,30 +523,6 @@ class _EventDetailsModal extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  void _showDeleteDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => _ConfirmDialog(
-        title: 'Deletar evento',
-        message:
-            'Tem certeza que deseja deletar esse evento?\nEssa ação não pode ser desfeita.',
-        confirmLabel: 'Deletar evento',
-        cancelLabel: 'Cancelar',
-        extraLinkText: 'Deseja cancelar o evento?',
-        onConfirm: () async {
-          Navigator.pop(context);
-          Navigator.pop(context);
-          await controller.deletarEvento(evento.id);
-        },
-        onCancel: () => Navigator.pop(context),
-        onExtraLink: () {
-          Navigator.pop(context);
-          _showCancelDialog(context);
-        },
-      ),
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum EventStatus { ativo, cancelado }
+enum EventStatus { ativo, encerrado, cancelado }
 
 class EventModel {
   final String id;
@@ -38,10 +38,42 @@ class EventModel {
   });
 
   int get vagasRestantes => vagasTotal - vagasOcupadas;
-  bool get estaAberto => status == EventStatus.ativo && vagasRestantes > 0;
+
+  /// Status efetivo calculado em tempo real, sem depender de escrita no Firestore.
+  ///
+  /// Um evento gravado como [EventStatus.ativo] mas cujo [dataFim] já passou
+  /// é tratado automaticamente como [EventStatus.encerrado] para toda lógica
+  /// de negócio (exibição, inscrição, visibilidade).  Isso elimina a necessidade
+  /// de Cloud Functions ou qualquer job de atualização de status.
+  EventStatus get statusEfetivo {
+    if (status != EventStatus.ativo) return status;
+    return DateTime.now().isAfter(dataFim)
+        ? EventStatus.encerrado
+        : EventStatus.ativo;
+  }
+
+  bool get estaAberto => statusEfetivo == EventStatus.ativo && vagasRestantes > 0;
+
+  /// Retorna true se o evento deve ser oculto da listagem pública.
+  ///
+  /// Regra: eventos encerrados ou cancelados desaparecem da listagem
+  /// pública após 4 dias da [dataFim].  O cálculo é puramente baseado
+  /// em data — não requer nenhuma alteração de campo no Firestore.
+  bool get isOculto {
+    final agora = DateTime.now();
+    // Evento ainda dentro do período de realização: sempre visível.
+    if (statusEfetivo == EventStatus.ativo) return false;
+    // Encerrado ou cancelado: janela de carência de 4 dias após o término.
+    final limiteVisibilidade = dataFim.add(const Duration(days: 4));
+    return agora.isAfter(limiteVisibilidade);
+  }
+
+  /// Retorna true se o evento deve aparecer na listagem pública.
+  bool get isVisivelNaListagem => !isOculto;
 
   String get statusTexto {
-    if (status == EventStatus.cancelado) return 'Cancelado';
+    if (statusEfetivo == EventStatus.cancelado) return 'Cancelado';
+    if (statusEfetivo == EventStatus.encerrado) return 'Encerrado';
     if (vagasRestantes <= 0) return 'Esgotado';
     return 'Disponível ($vagasRestantes vagas)';
   }
