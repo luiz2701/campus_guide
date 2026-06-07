@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../crudEvent/enrollment_controller.dart';
 import '../../crudEvent/event_controller.dart';
 import '../../crudEvent/event_model.dart';
+import '../../services/email_service.dart';
 import '../auth/user.dart';
 import 'edit_event_page.dart';
 
@@ -580,16 +581,27 @@ class _EventDetailsModal extends StatelessWidget {
     if (ok) {
       await onInscricaoAlterada();
       if (!context.mounted) return;
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            isInscrito
-                ? 'Inscrição cancelada com sucesso.'
-                : 'Inscrição realizada com sucesso.',
-          ),
-        ),
-      );
+      Navigator.pop(context); // fecha o modal do evento
+
+      if (isInscrito) {
+        // Desincrição: SnackBar simples é suficiente
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Inscrição cancelada com sucesso.')),
+        );
+      } else {
+        // Inscrição: exibe diálogo de confirmação e dispara e-mail
+        EmailService.enviarConfirmacaoInscricao(
+          usuario: usuario,
+          evento: evento,
+        ); // sem await — não bloqueia a UI
+
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const _InscricaoConfirmadaDialog(),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -834,6 +846,83 @@ class _EnrolledListDialog extends StatelessWidget {
                         );
                       },
                     ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Diálogo exibido após uma inscrição bem-sucedida.
+///
+/// Mostra os dados do evento confirmado e informa que um e-mail foi enviado.
+/// Popup de confirmação exibido após inscrição bem-sucedida.
+class _InscricaoConfirmadaDialog extends StatelessWidget {
+  const _InscricaoConfirmadaDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(28, 36, 28, 28),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Checkmark simples, sem círculo colorido
+            const Icon(
+              Icons.check,
+              size: 48,
+              color: Colors.black87,
+            ),
+            const SizedBox(height: 16),
+
+            // Título
+            const Text(
+              'Você está inscrito!',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+
+            // Subtítulo
+            const Text(
+              'Enviamos uma confirmação de inscrição para seu email.',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 28),
+
+            // Botão Continuar
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1535C9),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text(
+                  'Continuar',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+              ),
             ),
           ],
         ),
