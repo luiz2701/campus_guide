@@ -388,7 +388,9 @@ class _MyEventDetailsModal extends StatelessWidget {
                                     ? 'Cancelado'
                                     : 'Aberto',
                                 style: TextStyle(
-                                  color: evento.statusEfetivo == EventStatus.cancelado
+                                  color:
+                                      evento.statusEfetivo ==
+                                          EventStatus.cancelado
                                       ? Colors.red
                                       : Colors.green,
                                   fontWeight: FontWeight.w600,
