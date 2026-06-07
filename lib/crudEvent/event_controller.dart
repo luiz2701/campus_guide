@@ -93,23 +93,6 @@ class EventController extends ChangeNotifier {
     }
   }
 
-  Future<bool> deletarEvento(String id) async {
-    _setCarregando(true);
-    _setErro(null);
-
-    try {
-      await _repo.deletar(id);
-      eventos.removeWhere((evento) => evento.id == id);
-      notifyListeners();
-      return true;
-    } catch (e) {
-      _setErro('Erro ao deletar evento: $e');
-      return false;
-    } finally {
-      _setCarregando(false);
-    }
-  }
-
   Future<bool> cancelarEvento(String id) async {
     _setCarregando(true);
     _setErro(null);
