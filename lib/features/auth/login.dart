@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'auth_service.dart';
 import 'package:campus_guide/routes/app_routes.dart';
 import 'recuperar_senha.dart';
+import 'package:sign_in_button/sign_in_button.dart';
+
 /// Tela de login do aplicativo.
 ///
 /// - Usa um `Form` com validação simples para `email` e `senha`.
@@ -30,6 +32,48 @@ class _LoginState extends State<Login> {
 
   // Indica se uma requisição de autenticação está em andamento.
   bool _carregando = false;
+  //Método de login com o Google (apenas @souunit.com.br)
+  Future<void> _loginGoogle() async {
+    setState(() {
+      _carregando = true;
+    });
+
+    try {
+      final user = await _authService.signInWithGoogle();
+
+      if (!mounted) return;
+
+      if (user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login com Google efetuado!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.home,
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString().replaceAll('Exception: ', '')),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _carregando = false;
+        });
+      }
+    }
+  }
 
   /// Tenta autenticar o usuário com os valores dos controladores.
   ///
@@ -265,6 +309,23 @@ class _LoginState extends State<Login> {
                         ),
                       ),
 
+                      const SizedBox(height: 16),
+                      //Botão "Login com o Google"
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: SignInButton(
+                            Buttons.google,
+                            text: "Entrar com Google",
+                            onPressed: () {
+                              if (_carregando) return;
+                              _loginGoogle();
+                            },
+                          ),
+                        ),
+                      ),
                       // Link para recuperação de senha (ainda sem implementação).
                       TextButton(
                         style: TextButton.styleFrom(
