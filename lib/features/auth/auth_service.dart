@@ -2,19 +2,22 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import 'institutional_db.dart';
 import 'user.dart';
 
-
 //tentei fazer alterações aqui para que depois que o usuário verifica-se
-//o email o popup de encontrado aparece, mas acho que devido a limitações do firebase 
+//o email o popup de encontrado aparece, mas acho que devido a limitações do firebase
 //isso não está sendo posivel no momento, por isso vc pode deixar esse arquivo na main sem as auterações
 //que fiz
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   static const Duration _requestTimeout = Duration(seconds: 25);
+  //Restrição de login appenas com o email da UNIT
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    hostedDomain: "souunit.com.br",
+  );
 
   Future<AppUser?> buscarUsuarioAtual() async {
     final firebaseUser = _auth.currentUser;
@@ -34,6 +37,49 @@ class AuthService {
       matricula: '',
       role: '',
     );
+  }
+
+  //Usuário é criado no Firestone, caso ele já não exista
+  Future<User?> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+    if (googleUser == null) return null;
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final UserCredential userCredential = await _auth.signInWithCredential(
+      credential,
+    );
+
+    final User? user = userCredential.user;
+    //Valida se o email de fato é o institucional
+    if (user == null ||
+        user.email == null ||
+        !user.email!.endsWith("@souunit.com.br")) {
+      await _auth.signOut();
+      await _googleSignIn.signOut();
+
+      throw Exception("Use um e-mail institucional @souunit.com.br");
+    }
+    //Cria o usuário que não existir
+    final doc = await _db.collection('usuarios').doc(user.uid).get();
+
+    if (!doc.exists) {
+      await _db.collection('usuarios').doc(user.uid).set({
+        'email': user.email,
+        'name': user.displayName ?? '',
+        'matricula': user.email,
+        'role': 'student',
+      });
+    }
+
+    return user;
   }
 
   Future<void> atualizarPerfil({required String name}) async {
@@ -101,7 +147,7 @@ class AuthService {
       // Envia o e-mail de verificação
       await firebaseUser.sendEmailVerification();
 
-      // LOGOUT FORÇADO: O usuário é deslogado logo após o cadastro 
+      // LOGOUT FORÇADO: O usuário é deslogado logo após o cadastro
       // para que ele só acesse o app após clicar no link do e-mail.
       await _auth.signOut();
     }
@@ -121,7 +167,7 @@ class AuthService {
     if (user != null) {
       // 1. RECARREGA o estado do usuário do servidor Firebase
       await user.reload();
-      
+
       // 2. Atualiza a referência local após o recarregamento
       user = _auth.currentUser;
 
@@ -137,6 +183,7 @@ class AuthService {
   }
 
   Future<void> deslogar() async {
+    await _googleSignIn.signOut();
     await _auth.signOut();
   }
 }
