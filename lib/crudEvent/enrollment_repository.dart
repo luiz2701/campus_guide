@@ -92,6 +92,20 @@ class EnrollmentRepository {
         .toList();
   }
 
+  /// Stream em tempo real dos IDs de eventos em que [userID] está inscrito.
+  /// Usado por [MyEventsPage] para atualização automática sem reload.
+  Stream<List<String>> streamEventoIdsPorUsuario(String userID) {
+    return _col
+        .where('userID', isEqualTo: userID)
+        .snapshots()
+        .map(
+          (snap) => snap.docs
+              .map((doc) => doc.data()['eventoID'] as String?)
+              .whereType<String>()
+              .toList(),
+        );
+  }
+
   Future<List<Map<String, String>>> buscarInscritosDoEvento(
     String eventoID,
   ) async {

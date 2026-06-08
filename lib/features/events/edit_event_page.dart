@@ -47,6 +47,7 @@ class _EditEventPageState extends State<EditEventPage> {
   late final TextEditingController _tituloCtrl;
   late final TextEditingController _diaCtrl;
   late final TextEditingController _horaCtrl;
+  late final TextEditingController _horaFimCtrl;
   late final TextEditingController _localCtrl;
   late final TextEditingController _vagasCtrl;
   late final TextEditingController _descricaoCtrl;
@@ -74,6 +75,11 @@ class _EditEventPageState extends State<EditEventPage> {
           '${e.dataInicio.hour.toString().padLeft(2, '0')}:'
           '${e.dataInicio.minute.toString().padLeft(2, '0')}',
     );
+    _horaFimCtrl = TextEditingController(
+      text:
+          '${e.dataFim.hour.toString().padLeft(2, "0")}:'
+          '${e.dataFim.minute.toString().padLeft(2, "0")}',
+    );
     _localCtrl = TextEditingController(text: e.local);
     _vagasCtrl = TextEditingController(text: e.vagasTotal.toString());
     _descricaoCtrl = TextEditingController(text: e.descricao);
@@ -97,6 +103,7 @@ class _EditEventPageState extends State<EditEventPage> {
     _tituloCtrl.dispose();
     _diaCtrl.dispose();
     _horaCtrl.dispose();
+    _horaFimCtrl.dispose();
     _localCtrl.dispose();
     _vagasCtrl.dispose();
     _descricaoCtrl.dispose();
@@ -131,6 +138,18 @@ class _EditEventPageState extends State<EditEventPage> {
     }
   }
 
+  Future<void> _selecionarHoraFim() async {
+    final hora = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(widget.evento.dataFim),
+    );
+    if (hora != null) {
+      _horaFimCtrl.text =
+          '${hora.hour.toString().padLeft(2, "0")}:'
+          '${hora.minute.toString().padLeft(2, "0")}';
+    }
+  }
+
   void _adicionarMinistrante() {
     final nome = _ministranteCtrl.text.trim();
     if (nome.isEmpty) return;
@@ -148,6 +167,7 @@ class _EditEventPageState extends State<EditEventPage> {
     if (_tituloCtrl.text.trim().isEmpty ||
         _diaCtrl.text.trim().isEmpty ||
         _horaCtrl.text.trim().isEmpty ||
+        _horaFimCtrl.text.trim().isEmpty ||
         _localCtrl.text.trim().isEmpty ||
         _vagasCtrl.text.trim().isEmpty ||
         _cursoSelecionado == null ||
@@ -169,7 +189,11 @@ class _EditEventPageState extends State<EditEventPage> {
     final partesDia = _diaCtrl.text.trim().split('/');
     final partesHora = _horaCtrl.text.trim().split(':');
 
-    if (partesDia.length != 3 || partesHora.length != 2) {
+    final partesHoraFim = _horaFimCtrl.text.trim().split(':');
+
+    if (partesDia.length != 3 ||
+        partesHora.length != 2 ||
+        partesHoraFim.length != 2) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Informe uma data e hora válidas.')),
       );
@@ -184,11 +208,28 @@ class _EditEventPageState extends State<EditEventPage> {
       int.parse(partesHora[1]),
     );
 
+    final dataFim = DateTime(
+      int.parse(partesDia[2]),
+      int.parse(partesDia[1]),
+      int.parse(partesDia[0]),
+      int.parse(partesHoraFim[0]),
+      int.parse(partesHoraFim[1]),
+    );
+
+    if (!dataFim.isAfter(dataInicio)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('O horário de término deve ser após o de início.'),
+        ),
+      );
+      return;
+    }
+
     final eventoAtualizado = widget.evento.copyWith(
       titulo: _tituloCtrl.text.trim(),
       descricao: _descricaoCtrl.text.trim(),
       dataInicio: dataInicio,
-      dataFim: dataInicio.add(const Duration(hours: 2)),
+      dataFim: dataFim,
       local: _localCtrl.text.trim(),
       vagasTotal: vagas,
       curso: _cursoSelecionado!,
@@ -264,10 +305,17 @@ class _EditEventPageState extends State<EditEventPage> {
                 ),
                 const SizedBox(height: 14),
                 _CampoComIcone(
-                  hint: 'Hora',
+                  hint: 'Hora de início',
                   controller: _horaCtrl,
                   icon: Icons.schedule_outlined,
                   onIconTap: _selecionarHora,
+                ),
+                const SizedBox(height: 14),
+                _CampoComIcone(
+                  hint: 'Hora de término',
+                  controller: _horaFimCtrl,
+                  icon: Icons.schedule_outlined,
+                  onIconTap: _selecionarHoraFim,
                 ),
                 const SizedBox(height: 14),
                 _CampoComIcone(
