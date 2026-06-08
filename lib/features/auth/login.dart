@@ -3,6 +3,7 @@ import 'auth_service.dart';
 import 'package:campus_guide/routes/app_routes.dart';
 import 'recuperar_senha.dart';
 import 'package:sign_in_button/sign_in_button.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // [ALTERADO] Importação necessária para o FirebaseAuthException
 
 /// Tela de login do aplicativo.
 ///
@@ -26,6 +27,9 @@ class _LoginState extends State<Login> {
   // Controladores para os campos de entrada.
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhalController = TextEditingController();
+
+  // [ALTERADO] Variável de estado para controlar a visibilidade da senha
+  bool _ocultarSenha = true;
 
   // Serviço responsável pela autenticação (encapsula Firebase/REST etc.).
   final AuthService _authService = AuthService();
@@ -110,8 +114,27 @@ class _LoginState extends State<Login> {
             (route) => false,
           );
         }
+      } on FirebaseAuthException catch (e) { // [ALTERADO] Captura erros específicos do Firebase
+        if (!mounted) return;
+        
+        // [ALTERADO] Define mensagens amigáveis para credenciais incorretas
+        String mensagemErro = 'Ocorreu um erro ao fazer login.';
+        if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-credential') {
+          mensagemErro = 'E-mail ou senha incorretos. Verifique suas credenciais.';
+        } else if (e.code == 'invalid-email') {
+          mensagemErro = 'O formato do e-mail digitado é inválido.';
+        } else if (e.message != null) {
+          mensagemErro = e.message!.replaceAll('Exception: ', '');
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(mensagemErro),
+            backgroundColor: Colors.red,
+          ),
+        );
       } catch (e) {
-        // Em caso de erro, mostra a mensagem (limpa o prefixo 'Exception:').
+        // Em caso de erro genérico, mostra a mensagem (limpa o prefixo 'Exception:').
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -255,12 +278,24 @@ class _LoginState extends State<Login> {
                           opacity: 0.6,
                           child: TextFormField(
                             controller: senhalController,
-                            obscureText: true,
+                            obscureText: _ocultarSenha, // [ALTERADO] Controla a ocultação através da variável reativa
                             decoration: InputDecoration(
                               labelText: 'Senha',
                               labelStyle: const TextStyle(fontSize: 14),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
+                              ),
+                              // [ALTERADO] Adiciona o botão do "olhinho" no canto direito do campo mantendo o estilo
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _ocultarSenha ? Icons.visibility_off : Icons.visibility,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _ocultarSenha = !_ocultarSenha;
+                                  });
+                                },
                               ),
                             ),
                             validator: (value) {
