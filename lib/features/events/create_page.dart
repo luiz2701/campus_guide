@@ -45,6 +45,7 @@ class _CreatePageState extends State<CreatePage> {
   final _tituloCtrl = TextEditingController();
   final _diaCtrl = TextEditingController();
   final _horaCtrl = TextEditingController();
+  final _horaFimCtrl = TextEditingController();
   final _localCtrl = TextEditingController();
   final _vagasCtrl = TextEditingController();
   final _descricaoCtrl = TextEditingController();
@@ -71,6 +72,7 @@ class _CreatePageState extends State<CreatePage> {
     _tituloCtrl.dispose();
     _diaCtrl.dispose();
     _horaCtrl.dispose();
+    _horaFimCtrl.dispose();
     _localCtrl.dispose();
     _vagasCtrl.dispose();
     _descricaoCtrl.dispose();
@@ -105,6 +107,18 @@ class _CreatePageState extends State<CreatePage> {
     }
   }
 
+  Future<void> _selecionarHoraFim() async {
+    final hora = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (hora != null) {
+      _horaFimCtrl.text =
+          '${hora.hour.toString().padLeft(2, "0")}:'
+          '${hora.minute.toString().padLeft(2, "0")}';
+    }
+  }
+
   void _adicionarMinistrante() {
     final nome = _ministranteCtrl.text.trim();
     if (nome.isEmpty) return;
@@ -122,6 +136,7 @@ class _CreatePageState extends State<CreatePage> {
     if (_tituloCtrl.text.trim().isEmpty ||
         _diaCtrl.text.trim().isEmpty ||
         _horaCtrl.text.trim().isEmpty ||
+        _horaFimCtrl.text.trim().isEmpty ||
         _localCtrl.text.trim().isEmpty ||
         _vagasCtrl.text.trim().isEmpty ||
         _cursoSelecionado == null ||
@@ -143,7 +158,11 @@ class _CreatePageState extends State<CreatePage> {
     final partesDia = _diaCtrl.text.trim().split('/');
     final partesHora = _horaCtrl.text.trim().split(':');
 
-    if (partesDia.length != 3 || partesHora.length != 2) {
+    final partesHoraFim = _horaFimCtrl.text.trim().split(':');
+
+    if (partesDia.length != 3 ||
+        partesHora.length != 2 ||
+        partesHoraFim.length != 2) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Informe uma data e hora válidas.')),
       );
@@ -158,11 +177,28 @@ class _CreatePageState extends State<CreatePage> {
       int.parse(partesHora[1]),
     );
 
+    final dataFim = DateTime(
+      int.parse(partesDia[2]),
+      int.parse(partesDia[1]),
+      int.parse(partesDia[0]),
+      int.parse(partesHoraFim[0]),
+      int.parse(partesHoraFim[1]),
+    );
+
+    if (!dataFim.isAfter(dataInicio)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('O horário de término deve ser após o de início.'),
+        ),
+      );
+      return;
+    }
+
     final ok = await _controller.criarEvento(
       titulo: _tituloCtrl.text.trim(),
       descricao: _descricaoCtrl.text.trim(),
       dataInicio: dataInicio,
-      dataFim: dataInicio.add(const Duration(hours: 2)),
+      dataFim: dataFim,
       local: _localCtrl.text.trim(),
       vagasTotal: vagas,
       curso: _cursoSelecionado!,
@@ -176,6 +212,7 @@ class _CreatePageState extends State<CreatePage> {
       _tituloCtrl.clear();
       _diaCtrl.clear();
       _horaCtrl.clear();
+      _horaFimCtrl.clear();
       _localCtrl.clear();
       _vagasCtrl.clear();
       _descricaoCtrl.clear();
@@ -233,10 +270,17 @@ class _CreatePageState extends State<CreatePage> {
                 ),
                 const SizedBox(height: 14),
                 _CampoComIcone(
-                  hint: 'Hora',
+                  hint: 'Hora de início',
                   controller: _horaCtrl,
                   icon: Icons.schedule_outlined,
                   onIconTap: _selecionarHora,
+                ),
+                const SizedBox(height: 14),
+                _CampoComIcone(
+                  hint: 'Hora de término',
+                  controller: _horaFimCtrl,
+                  icon: Icons.schedule_outlined,
+                  onIconTap: _selecionarHoraFim,
                 ),
                 const SizedBox(height: 14),
                 AppTextField(hint: 'Local', controller: _localCtrl),

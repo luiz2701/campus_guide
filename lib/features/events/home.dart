@@ -418,7 +418,9 @@ class _EventDetailsModal extends StatelessWidget {
                                     ? 'Cancelado'
                                     : 'Aberto',
                                 style: TextStyle(
-                                  color: evento.statusEfetivo == EventStatus.cancelado
+                                  color:
+                                      evento.statusEfetivo ==
+                                          EventStatus.cancelado
                                       ? Colors.red
                                       : Colors.green,
                                   fontWeight: FontWeight.w600,
@@ -873,11 +875,7 @@ class _InscricaoConfirmadaDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Checkmark simples, sem círculo colorido
-            const Icon(
-              Icons.check,
-              size: 48,
-              color: Colors.black87,
-            ),
+            const Icon(Icons.check, size: 48, color: Colors.black87),
             const SizedBox(height: 16),
 
             // Título
