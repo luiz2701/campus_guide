@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final history =
         events
             .whereType<EventModel>()
-            .where((event) => !event.dataInicio.isAfter(now))
+            .where((event) => event.statusEfetivo != EventStatus.ativo)
             .toList()
           ..sort((a, b) => b.dataInicio.compareTo(a.dataInicio));
 
