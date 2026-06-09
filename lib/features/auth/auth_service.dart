@@ -147,9 +147,7 @@ class AuthService {
       // Envia o e-mail de verificação
       await firebaseUser.sendEmailVerification();
 
-      // LOGOUT FORÇADO: O usuário é deslogado logo após o cadastro
-      // para que ele só acesse o app após clicar no link do e-mail.
-      await _auth.signOut();
+      
     }
   }
 
