@@ -153,3 +153,17 @@ Sprint 3 - (27/05 - 03/06)
 - Davi Reis | Melhoramento
 
 - João Pedro S. Caetano | Melhoramento
+
+## Vídeo de defesa
+
+- Kauã 
+
+- Luís Gustavo 
+
+- José Alves 
+
+- Luiz Armando 
+
+- Davi Reis | Perfil e Editar Perfil | https://drive.google.com/file/d/19xVbxOGEffQJsbceN3jcgCUDn5ZoDHbE/view?usp=sharing
+
+- João Pedro S. Caetano
