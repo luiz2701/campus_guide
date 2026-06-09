@@ -10,7 +10,11 @@ import '../auth/user.dart';
 import 'edit_event_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  /// Incrementado pelo `HomeShell` toda vez que esta aba fica visível.
+  /// Quando muda, a página recarrega os eventos automaticamente.
+  final int reloadToken;
+
+  const HomePage({super.key, this.reloadToken = 0});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -28,6 +32,14 @@ class _HomePageState extends State<HomePage> {
     _controller.addListener(_rebuild);
     _enrollmentController.addListener(_rebuild);
     _carregarDados();
+  }
+
+  @override
+  void didUpdateWidget(HomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.reloadToken != oldWidget.reloadToken) {
+      _carregarDados();
+    }
   }
 
   void _rebuild() {
