@@ -41,8 +41,8 @@ class EventController extends ChangeNotifier {
     required DateTime dataFim,
     required String local,
     required int vagasTotal,
-    required String curso,
-    String periodo = '',
+    List<String> cursos = const [],
+    List<String> periodos = const [],
     List<Map<String, String>> ministrantes = const [],
   }) async {
     _setCarregando(true);
@@ -58,8 +58,8 @@ class EventController extends ChangeNotifier {
         dataFim: dataFim,
         local: local,
         vagasTotal: vagasTotal,
-        curso: curso,
-        periodo: periodo,
+        cursos: cursos,
+        periodos: periodos,
         ministrantes: ministrantes,
         criadoPor: FirebaseAuth.instance.currentUser?.uid ?? '',
         criadoEm: agora,

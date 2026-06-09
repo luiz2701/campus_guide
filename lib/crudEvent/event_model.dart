@@ -11,8 +11,12 @@ class EventModel {
   final String local;
   final int vagasTotal;
   final int vagasOcupadas;
-  final String curso;
-  final String periodo;
+  /// Lista de cursos para os quais o evento é destinado.
+  final List<String> cursos;
+
+  /// Lista de períodos para os quais o evento é destinado.
+  final List<String> periodos;
+
   final List<Map<String, String>> ministrantes;
   final EventStatus status;
   final String criadoPor;
@@ -28,8 +32,8 @@ class EventModel {
     required this.local,
     required this.vagasTotal,
     this.vagasOcupadas = 0,
-    required this.curso,
-    this.periodo = '',
+    this.cursos = const [],
+    this.periodos = const [],
     this.ministrantes = const [],
     this.status = EventStatus.ativo,
     this.criadoPor = '',
@@ -87,8 +91,8 @@ class EventModel {
       'local': local,
       'vagasTotal': vagasTotal,
       'vagasOcupadas': vagasOcupadas,
-      'curso': curso,
-      'periodo': periodo,
+      'cursos': cursos,
+      'periodos': periodos,
       'ministrantes': ministrantes,
       'status': status.name,
       'criadoPor': criadoPor,
@@ -109,8 +113,9 @@ class EventModel {
       local: data['local'] ?? '',
       vagasTotal: data['vagasTotal'] ?? 0,
       vagasOcupadas: data['vagasOcupadas'] ?? 0,
-      curso: data['curso'] ?? '',
-      periodo: data['periodo'] ?? '',
+      // Compatibilidade retroativa: aceita List (novo) e String (legado).
+      cursos: _parseStringOrList(data['cursos'] ?? data['curso']),
+      periodos: _parseStringOrList(data['periodos'] ?? data['periodo']),
       ministrantes: List<Map<String, String>>.from(
         (data['ministrantes'] as List? ?? []).map(
           (ministrante) => Map<String, String>.from(ministrante as Map),
@@ -123,6 +128,14 @@ class EventModel {
     );
   }
 
+  /// Converte String legada ou List<dynamic> nova em List<String>.
+  static List<String> _parseStringOrList(dynamic value) {
+    if (value == null) return [];
+    if (value is String) return value.isEmpty ? [] : [value];
+    if (value is List) return List<String>.from(value.map((e) => e.toString()));
+    return [];
+  }
+
   EventModel copyWith({
     String? titulo,
     String? descricao,
@@ -131,8 +144,8 @@ class EventModel {
     String? local,
     int? vagasTotal,
     int? vagasOcupadas,
-    String? curso,
-    String? periodo,
+    List<String>? cursos,
+    List<String>? periodos,
     List<Map<String, String>>? ministrantes,
     EventStatus? status,
     String? criadoPor,
@@ -146,8 +159,8 @@ class EventModel {
       local: local ?? this.local,
       vagasTotal: vagasTotal ?? this.vagasTotal,
       vagasOcupadas: vagasOcupadas ?? this.vagasOcupadas,
-      curso: curso ?? this.curso,
-      periodo: periodo ?? this.periodo,
+      cursos: cursos ?? this.cursos,
+      periodos: periodos ?? this.periodos,
       ministrantes: ministrantes ?? this.ministrantes,
       status: status ?? this.status,
       criadoPor: criadoPor ?? this.criadoPor,

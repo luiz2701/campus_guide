@@ -17,10 +17,21 @@ class HomeShell extends StatefulWidget {
 class _HomeShellState extends State<HomeShell> {
   int currentIndex = 0;
 
+  /// Incrementado toda vez que a aba Home (índice 0) fica visível.
+  /// `HomePage` observa esse valor via `didUpdateWidget` e recarrega os eventos.
+  int _homeReloadToken = 0;
+
+  void _onTabTap(int i) {
+    setState(() {
+      if (i == 0) _homeReloadToken++;
+      currentIndex = i;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final pages = <Widget>[
-      const HomePage(),
+      HomePage(reloadToken: _homeReloadToken),
       const CreatePage(),
       const MyEventsPage(),
       const ProfilePage(showBottomNavigationBar: false),
@@ -31,7 +42,7 @@ class _HomeShellState extends State<HomeShell> {
       body: IndexedStack(index: currentIndex, children: pages),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: currentIndex,
-        onTap: (i) => setState(() => currentIndex = i),
+        onTap: _onTabTap,
       ),
     );
   }
