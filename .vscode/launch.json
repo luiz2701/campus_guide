@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Campus Guide (Flutter Web)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port", "54180"
+            ]
+        }
+    ]
+}
