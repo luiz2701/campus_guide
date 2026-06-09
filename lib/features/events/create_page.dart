@@ -4,33 +4,7 @@ import 'package:flutter/services.dart';
 import '../../components/buttons/primary_button.dart';
 import '../../components/inputs/app_text_field.dart';
 import '../../crudEvent/event_controller.dart';
-
-const _cursos = [
-  'Ciência da Computação',
-  'Engenharia de Software',
-  'Sistemas de Informação',
-  'Análise e Desenvolvimento de Sistemas',
-  'Engenharia Civil',
-  'Engenharia Elétrica',
-  'Administração',
-  'Direito',
-  'Medicina',
-  'Todos os cursos',
-];
-
-const _periodos = [
-  '1º Período',
-  '2º Período',
-  '3º Período',
-  '4º Período',
-  '5º Período',
-  '6º Período',
-  '7º Período',
-  '8º Período',
-  '9º Período',
-  '10º Período',
-  'Todos os períodos',
-];
+import 'event_form_data.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
@@ -45,13 +19,14 @@ class _CreatePageState extends State<CreatePage> {
   final _tituloCtrl = TextEditingController();
   final _diaCtrl = TextEditingController();
   final _horaCtrl = TextEditingController();
+  final _horaFimCtrl = TextEditingController();
   final _localCtrl = TextEditingController();
   final _vagasCtrl = TextEditingController();
   final _descricaoCtrl = TextEditingController();
   final _ministranteCtrl = TextEditingController();
 
-  String? _cursoSelecionado;
-  String? _periodoSelecionado;
+  List<String> _cursosSelecionados = [];
+  List<String> _periodosSelecionados = [];
   final List<String> _ministrantes = [];
 
   @override
@@ -71,6 +46,7 @@ class _CreatePageState extends State<CreatePage> {
     _tituloCtrl.dispose();
     _diaCtrl.dispose();
     _horaCtrl.dispose();
+    _horaFimCtrl.dispose();
     _localCtrl.dispose();
     _vagasCtrl.dispose();
     _descricaoCtrl.dispose();
@@ -105,6 +81,18 @@ class _CreatePageState extends State<CreatePage> {
     }
   }
 
+  Future<void> _selecionarHoraFim() async {
+    final hora = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (hora != null) {
+      _horaFimCtrl.text =
+          '${hora.hour.toString().padLeft(2, "0")}:'
+          '${hora.minute.toString().padLeft(2, "0")}';
+    }
+  }
+
   void _adicionarMinistrante() {
     final nome = _ministranteCtrl.text.trim();
     if (nome.isEmpty) return;
@@ -118,14 +106,24 @@ class _CreatePageState extends State<CreatePage> {
     setState(() => _ministrantes.removeAt(index));
   }
 
+  void _onCursosChanged(List<String> novos) {
+    setState(() {
+      _cursosSelecionados = novos;
+      // Remove períodos que não existem mais nos cursos selecionados.
+      final validos = periodosParaCursos(novos);
+      _periodosSelecionados.retainWhere(validos.contains);
+    });
+  }
+
   Future<void> _publicar() async {
     if (_tituloCtrl.text.trim().isEmpty ||
         _diaCtrl.text.trim().isEmpty ||
         _horaCtrl.text.trim().isEmpty ||
+        _horaFimCtrl.text.trim().isEmpty ||
         _localCtrl.text.trim().isEmpty ||
         _vagasCtrl.text.trim().isEmpty ||
-        _cursoSelecionado == null ||
-        _periodoSelecionado == null) {
+        _cursosSelecionados.isEmpty ||
+        _periodosSelecionados.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Preencha todos os campos obrigatórios.')),
       );
@@ -143,7 +141,11 @@ class _CreatePageState extends State<CreatePage> {
     final partesDia = _diaCtrl.text.trim().split('/');
     final partesHora = _horaCtrl.text.trim().split(':');
 
-    if (partesDia.length != 3 || partesHora.length != 2) {
+    final partesHoraFim = _horaFimCtrl.text.trim().split(':');
+
+    if (partesDia.length != 3 ||
+        partesHora.length != 2 ||
+        partesHoraFim.length != 2) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Informe uma data e hora válidas.')),
       );
@@ -158,15 +160,32 @@ class _CreatePageState extends State<CreatePage> {
       int.parse(partesHora[1]),
     );
 
+    final dataFim = DateTime(
+      int.parse(partesDia[2]),
+      int.parse(partesDia[1]),
+      int.parse(partesDia[0]),
+      int.parse(partesHoraFim[0]),
+      int.parse(partesHoraFim[1]),
+    );
+
+    if (!dataFim.isAfter(dataInicio)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('O horário de término deve ser após o de início.'),
+        ),
+      );
+      return;
+    }
+
     final ok = await _controller.criarEvento(
       titulo: _tituloCtrl.text.trim(),
       descricao: _descricaoCtrl.text.trim(),
       dataInicio: dataInicio,
-      dataFim: dataInicio.add(const Duration(hours: 2)),
+      dataFim: dataFim,
       local: _localCtrl.text.trim(),
       vagasTotal: vagas,
-      curso: _cursoSelecionado!,
-      periodo: _periodoSelecionado!,
+      cursos: _cursosSelecionados,
+      periodos: _periodosSelecionados,
       ministrantes: _ministrantes.map((n) => {'nome': n}).toList(),
     );
 
@@ -176,13 +195,14 @@ class _CreatePageState extends State<CreatePage> {
       _tituloCtrl.clear();
       _diaCtrl.clear();
       _horaCtrl.clear();
+      _horaFimCtrl.clear();
       _localCtrl.clear();
       _vagasCtrl.clear();
       _descricaoCtrl.clear();
       _ministranteCtrl.clear();
       setState(() {
-        _cursoSelecionado = null;
-        _periodoSelecionado = null;
+        _cursosSelecionados = [];
+        _periodosSelecionados = [];
         _ministrantes.clear();
       });
       ScaffoldMessenger.of(context).showSnackBar(
@@ -233,10 +253,17 @@ class _CreatePageState extends State<CreatePage> {
                 ),
                 const SizedBox(height: 14),
                 _CampoComIcone(
-                  hint: 'Hora',
+                  hint: 'Hora de início',
                   controller: _horaCtrl,
                   icon: Icons.schedule_outlined,
                   onIconTap: _selecionarHora,
+                ),
+                const SizedBox(height: 14),
+                _CampoComIcone(
+                  hint: 'Hora de término',
+                  controller: _horaFimCtrl,
+                  icon: Icons.schedule_outlined,
+                  onIconTap: _selecionarHoraFim,
                 ),
                 const SizedBox(height: 14),
                 AppTextField(hint: 'Local', controller: _localCtrl),
@@ -255,18 +282,19 @@ class _CreatePageState extends State<CreatePage> {
                   decoration: _inputDecoration('Descrição'),
                 ),
                 const SizedBox(height: 14),
-                _DropdownField<String>(
+                MultiSelectField(
                   hint: 'Curso',
-                  value: _cursoSelecionado,
-                  items: _cursos,
-                  onChanged: (v) => setState(() => _cursoSelecionado = v),
+                  options: kCursos,
+                  selected: _cursosSelecionados,
+                  onChanged: _onCursosChanged,
                 ),
                 const SizedBox(height: 14),
-                _DropdownField<String>(
+                MultiSelectField(
                   hint: 'Período',
-                  value: _periodoSelecionado,
-                  items: _periodos,
-                  onChanged: (v) => setState(() => _periodoSelecionado = v),
+                  options: periodosParaCursos(_cursosSelecionados),
+                  selected: _periodosSelecionados,
+                  enabled: _cursosSelecionados.isNotEmpty,
+                  onChanged: (v) => setState(() => _periodosSelecionados = v),
                 ),
                 const SizedBox(height: 14),
                 _MinistrantesField(
@@ -361,55 +389,6 @@ class _CampoComIcone extends StatelessWidget {
   }
 }
 
-class _DropdownField<T> extends StatelessWidget {
-  final String hint;
-  final T? value;
-  final List<T> items;
-  final ValueChanged<T?> onChanged;
-
-  const _DropdownField({
-    required this.hint,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField<T>(
-      initialValue: value,
-      hint: Text(hint, style: const TextStyle(color: Colors.black45)),
-      isExpanded: true,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF3B5EDF)),
-        ),
-      ),
-      items: items
-          .map(
-            (item) =>
-                DropdownMenuItem<T>(value: item, child: Text(item.toString())),
-          )
-          .toList(),
-      onChanged: onChanged,
-    );
-  }
-}
 
 class _MinistrantesField extends StatelessWidget {
   final TextEditingController controller;

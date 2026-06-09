@@ -138,7 +138,7 @@ Sprint 2 - (13/05 - 27/05)
   
 - Davi Reis | Tela de perfil
 
-- João Pedro S. Caetano | Tela de Criar Eventos
+- João Pedro S. Caetano | Tela de Criar Eventos e Editar Eventos.
 
 Sprint 3 - (27/05 - 03/06)
 
@@ -152,4 +152,18 @@ Sprint 3 - (27/05 - 03/06)
 
 - Davi Reis | Melhoramento
 
-- João Pedro S. Caetano | Melhoramento
+- João Pedro S. Caetano | Melhorar Criar e Editar Eventos
+
+## Vídeo de defesa
+
+- Kauã 
+
+- Luís Gustavo 
+
+- José Alves 
+
+- Luiz Armando 
+
+- Davi Reis | Perfil e Editar Perfil | https://drive.google.com/file/d/17pOSvneUC70ukvUlGGAfHy4FT76heTzW/view?usp=sharing
+ 
+- João Pedro S. Caetano | Criar Evento e Editar Evento |

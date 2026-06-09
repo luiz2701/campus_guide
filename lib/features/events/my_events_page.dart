@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../crudEvent/enrollment_controller.dart';
-import '../../crudEvent/event_controller.dart';
+import '../../crudEvent/enrollment_repository.dart';
 import '../../crudEvent/event_model.dart';
+import '../../crudEvent/event_repository.dart';
 
 class MyEventsPage extends StatefulWidget {
   const MyEventsPage({super.key});
@@ -13,45 +14,14 @@ class MyEventsPage extends StatefulWidget {
 }
 
 class _MyEventsPageState extends State<MyEventsPage> {
-  final _eventController = EventController();
+  // Streams mantêm a tela sincronizada em tempo real — sem reload manual.
+  final _eventRepo = EventRepository();
+  final _enrollmentRepo = EnrollmentRepository();
+
+  // Usado apenas para desinscrever (operação pontual de escrita).
   final _enrollmentController = EnrollmentController();
 
   String? get _userID => FirebaseAuth.instance.currentUser?.uid;
-
-  @override
-  void initState() {
-    super.initState();
-    _eventController.addListener(_rebuild);
-    _enrollmentController.addListener(_rebuild);
-    _carregarDados();
-  }
-
-  void _rebuild() {
-    if (mounted) setState(() {});
-  }
-
-  @override
-  void dispose() {
-    _eventController.removeListener(_rebuild);
-    _enrollmentController.removeListener(_rebuild);
-    _eventController.dispose();
-    _enrollmentController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _carregarDados() async {
-    final userID = _userID;
-    await _eventController.carregarEventos();
-    if (userID != null) {
-      await _enrollmentController.carregarInscricoes(userID);
-    }
-  }
-
-  List<EventModel> get _eventosInscritos {
-    return _eventController.eventos
-        .where((evento) => _enrollmentController.estaInscrito(evento.id))
-        .toList();
-  }
 
   String _labelData(DateTime dt) {
     final hoje = DateTime.now();
@@ -105,64 +75,71 @@ class _MyEventsPageState extends State<MyEventsPage> {
       );
     }
 
-    if ((_eventController.carregando || _enrollmentController.carregando) &&
-        _eventController.eventos.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: Colors.white),
-      );
-    }
-
-    final erro = _eventController.erro ?? _enrollmentController.erro;
-    if (erro != null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white70, size: 48),
-            const SizedBox(height: 12),
-            Text(
-              erro,
-              style: const TextStyle(color: Colors.white70),
-              textAlign: TextAlign.center,
+    // Outer stream: IDs dos eventos em que o usuário está inscrito
+    return StreamBuilder<List<String>>(
+      stream: _enrollmentRepo.streamEventoIdsPorUsuario(userID),
+      builder: (context, enrollSnap) {
+        if (enrollSnap.hasError) {
+          return const Center(
+            child: Text(
+              'Erro ao carregar inscrições.',
+              style: TextStyle(color: Colors.white70),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _carregarDados,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Tentar novamente'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    final eventos = _eventosInscritos;
-    if (eventos.isEmpty) {
-      return const Center(
-        child: Text(
-          'Você ainda não está inscrito em nenhum evento.',
-          style: TextStyle(color: Colors.white70, fontSize: 15),
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _carregarDados,
-      color: const Color(0xFF1535C9),
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        itemCount: eventos.length,
-        itemBuilder: (context, index) {
-          final evento = eventos[index];
-          return _MyEventListCard(
-            evento: evento,
-            labelData: _labelData(evento.dataInicio),
-            labelHora: _labelHora(evento.dataInicio),
-            onTap: () => _abrirDetalhes(evento),
           );
-        },
-      ),
+        }
+
+        final enrolledIds = enrollSnap.data ?? [];
+
+        // Inner stream: todos os eventos em tempo real
+        return StreamBuilder<List<EventModel>>(
+          stream: _eventRepo.stream(),
+          builder: (context, eventSnap) {
+            if (eventSnap.connectionState == ConnectionState.waiting &&
+                !eventSnap.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            }
+
+            if (eventSnap.hasError) {
+              return const Center(
+                child: Text(
+                  'Erro ao carregar eventos.',
+                  style: TextStyle(color: Colors.white70),
+                ),
+              );
+            }
+
+            final eventos = (eventSnap.data ?? [])
+                .where((e) => enrolledIds.contains(e.id))
+                .toList();
+
+            if (eventos.isEmpty) {
+              return const Center(
+                child: Text(
+                  'Você ainda não está inscrito em nenhum evento.',
+                  style: TextStyle(color: Colors.white70, fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
+
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              itemCount: eventos.length,
+              itemBuilder: (context, index) {
+                final evento = eventos[index];
+                return _MyEventListCard(
+                  evento: evento,
+                  labelData: _labelData(evento.dataInicio),
+                  labelHora: _labelHora(evento.dataInicio),
+                  onTap: () => _abrirDetalhes(evento),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 
@@ -188,10 +165,9 @@ class _MyEventsPageState extends State<MyEventsPage> {
     );
 
     if (!mounted) return;
+    Navigator.pop(context);
     if (ok) {
-      await _carregarDados();
-      if (!mounted) return;
-      Navigator.pop(context);
+      // O StreamBuilder detecta a mudança automaticamente — sem reload manual.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Inscrição cancelada com sucesso.')),
       );
