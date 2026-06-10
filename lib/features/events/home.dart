@@ -10,7 +10,11 @@ import '../auth/user.dart';
 import 'edit_event_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  /// Incrementado pelo `HomeShell` toda vez que esta aba fica visível.
+  /// Quando muda, a página recarrega os eventos automaticamente.
+  final int reloadToken;
+
+  const HomePage({super.key, this.reloadToken = 0});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -28,6 +32,14 @@ class _HomePageState extends State<HomePage> {
     _controller.addListener(_rebuild);
     _enrollmentController.addListener(_rebuild);
     _carregarDados();
+  }
+
+  @override
+  void didUpdateWidget(HomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.reloadToken != oldWidget.reloadToken) {
+      _carregarDados();
+    }
   }
 
   void _rebuild() {
@@ -902,60 +914,64 @@ class _InscricaoConfirmadaDialog extends StatelessWidget {
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(28, 36, 28, 28),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Checkmark simples, sem círculo colorido
-            const Icon(Icons.check, size: 48, color: Colors.black87),
-            const SizedBox(height: 16),
+      child: SizedBox(
+        width: 350,
+        height: 290,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(28, 36, 28, 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Checkmark simples, sem círculo colorido
+              const Icon(Icons.check, size: 48, color: Colors.black87),
+              const SizedBox(height: 16),
 
-            // Título
-            const Text(
-              'Você está inscrito!',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+              // Título
+              const Text(
+                'Você está inscrito!',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            // Subtítulo
-            const Text(
-              'Enviamos uma confirmação de inscrição para seu email.',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black54,
-                height: 1.5,
+              // Subtítulo
+              const Text(
+                'Enviamos uma confirmação de inscrição para seu email.',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black54,
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 28),
+              const SizedBox(height: 28),
 
-            // Botão Continuar
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1535C9),
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+              // Botão Continuar
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1535C9),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: const Text(
+                    'Continuar',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ),
-                child: const Text(
-                  'Continuar',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

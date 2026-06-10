@@ -126,6 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
       bottomNavigationBar: widget.showBottomNavigationBar
           ? AppBottomNavBar(
               currentIndex: currentIndex,
+              isDocente: false,
               onTap: (index) {
                 setState(() {
                   currentIndex = index;

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final bool isDocente;
 
   const AppBottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    required this.isDocente,
   });
 
   Widget _buildItem(
@@ -56,9 +58,7 @@ class AppBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 12,
-      ), // Padding around the Row
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -72,14 +72,28 @@ class AppBottomNavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildItem(Icons.home_outlined, Icons.home, "Home", 0),
-            _buildItem(Icons.add_circle_outline, Icons.add_circle, "Criar", 1),
+
+            if (isDocente)
+              _buildItem(
+                Icons.add_circle_outline,
+                Icons.add_circle,
+                "Criar",
+                1,
+              ),
+
             _buildItem(
               Icons.calendar_month_outlined,
               Icons.calendar_month,
               "Eventos",
-              2,
+              isDocente ? 2 : 1,
             ),
-            _buildItem(Icons.person_outline, Icons.person, "Perfil", 3),
+
+            _buildItem(
+              Icons.person_outline,
+              Icons.person,
+              "Perfil",
+              isDocente ? 3 : 2,
+            ),
           ],
         ),
       ),

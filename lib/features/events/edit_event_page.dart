@@ -4,33 +4,7 @@ import 'package:flutter/services.dart';
 import '../../components/buttons/primary_button.dart';
 import '../../crudEvent/event_controller.dart';
 import '../../crudEvent/event_model.dart';
-
-const _cursos = [
-  'Ciência da Computação',
-  'Engenharia de Software',
-  'Sistemas de Informação',
-  'Análise e Desenvolvimento de Sistemas',
-  'Engenharia Civil',
-  'Engenharia Elétrica',
-  'Administração',
-  'Direito',
-  'Medicina',
-  'Todos os cursos',
-];
-
-const _periodos = [
-  '1º Período',
-  '2º Período',
-  '3º Período',
-  '4º Período',
-  '5º Período',
-  '6º Período',
-  '7º Período',
-  '8º Período',
-  '9º Período',
-  '10º Período',
-  'Todos os períodos',
-];
+import 'event_form_data.dart';
 
 class EditEventPage extends StatefulWidget {
   final EventModel evento;
@@ -53,8 +27,8 @@ class _EditEventPageState extends State<EditEventPage> {
   late final TextEditingController _descricaoCtrl;
   final TextEditingController _ministranteCtrl = TextEditingController();
 
-  String? _cursoSelecionado;
-  String? _periodoSelecionado;
+  late List<String> _cursosSelecionados;
+  late List<String> _periodosSelecionados;
   late List<String> _ministrantes;
 
   @override
@@ -84,8 +58,8 @@ class _EditEventPageState extends State<EditEventPage> {
     _vagasCtrl = TextEditingController(text: e.vagasTotal.toString());
     _descricaoCtrl = TextEditingController(text: e.descricao);
 
-    _cursoSelecionado = _cursos.contains(e.curso) ? e.curso : null;
-    _periodoSelecionado = _periodos.contains(e.periodo) ? e.periodo : null;
+    _cursosSelecionados = List<String>.from(e.cursos);
+    _periodosSelecionados = List<String>.from(e.periodos);
     _ministrantes = e.ministrantes
         .map((m) => m['nome'] ?? '')
         .where((n) => n.isNotEmpty)
@@ -163,6 +137,14 @@ class _EditEventPageState extends State<EditEventPage> {
     setState(() => _ministrantes.removeAt(index));
   }
 
+  void _onCursosChanged(List<String> novos) {
+    setState(() {
+      _cursosSelecionados = novos;
+      final validos = periodosParaCursos(novos);
+      _periodosSelecionados.retainWhere(validos.contains);
+    });
+  }
+
   Future<void> _salvar() async {
     if (_tituloCtrl.text.trim().isEmpty ||
         _diaCtrl.text.trim().isEmpty ||
@@ -170,8 +152,8 @@ class _EditEventPageState extends State<EditEventPage> {
         _horaFimCtrl.text.trim().isEmpty ||
         _localCtrl.text.trim().isEmpty ||
         _vagasCtrl.text.trim().isEmpty ||
-        _cursoSelecionado == null ||
-        _periodoSelecionado == null) {
+        _cursosSelecionados.isEmpty ||
+        _periodosSelecionados.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Preencha todos os campos obrigatórios.')),
       );
@@ -232,8 +214,8 @@ class _EditEventPageState extends State<EditEventPage> {
       dataFim: dataFim,
       local: _localCtrl.text.trim(),
       vagasTotal: vagas,
-      curso: _cursoSelecionado!,
-      periodo: _periodoSelecionado!,
+      cursos: _cursosSelecionados,
+      periodos: _periodosSelecionados,
       ministrantes: _ministrantes.map((n) => {'nome': n}).toList(),
     );
 
@@ -338,18 +320,19 @@ class _EditEventPageState extends State<EditEventPage> {
                   decoration: _inputDecoration('Descrição'),
                 ),
                 const SizedBox(height: 14),
-                _DropdownField<String>(
+                MultiSelectField(
                   hint: 'Curso',
-                  value: _cursoSelecionado,
-                  items: _cursos,
-                  onChanged: (v) => setState(() => _cursoSelecionado = v),
+                  options: kCursos,
+                  selected: _cursosSelecionados,
+                  onChanged: _onCursosChanged,
                 ),
                 const SizedBox(height: 14),
-                _DropdownField<String>(
+                MultiSelectField(
                   hint: 'Período',
-                  value: _periodoSelecionado,
-                  items: _periodos,
-                  onChanged: (v) => setState(() => _periodoSelecionado = v),
+                  options: periodosParaCursos(_cursosSelecionados),
+                  selected: _periodosSelecionados,
+                  enabled: _cursosSelecionados.isNotEmpty,
+                  onChanged: (v) => setState(() => _periodosSelecionados = v),
                 ),
                 const SizedBox(height: 14),
                 _MinistrantesField(
@@ -448,55 +431,6 @@ class _CampoComIcone extends StatelessWidget {
   }
 }
 
-class _DropdownField<T> extends StatelessWidget {
-  final String hint;
-  final T? value;
-  final List<T> items;
-  final ValueChanged<T?> onChanged;
-
-  const _DropdownField({
-    required this.hint,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField<T>(
-      initialValue: value,
-      hint: Text(hint, style: const TextStyle(color: Colors.black45)),
-      isExpanded: true,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF3B5EDF)),
-        ),
-      ),
-      items: items
-          .map(
-            (item) =>
-                DropdownMenuItem<T>(value: item, child: Text(item.toString())),
-          )
-          .toList(),
-      onChanged: onChanged,
-    );
-  }
-}
 
 class _MinistrantesField extends StatelessWidget {
   final TextEditingController controller;
