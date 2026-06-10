@@ -42,7 +42,7 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
                   fit: BoxFit.contain,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 350,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
                             email: emailController.text.trim(),
                           );
                           if (!mounted) return;
-                          // Ao enviar, vai para a tela de espera que já inicia o contador
+                          // Ao enviar, vai para a tela de espera
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -119,21 +119,40 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
   }
 }
 
-// 2. TELA DE ESPERA: ALERTA EM 15s, DURAÇÃO DE 3s
+// 2. TELA DE ESPERA: ALERTA DISPARADO AO RETORNAR AO APP
 class AguardandoRecuperacao extends StatefulWidget {
   const AguardandoRecuperacao({super.key});
   @override
   State<AguardandoRecuperacao> createState() => _AguardandoRecuperacaoState();
 }
 
-class _AguardandoRecuperacaoState extends State<AguardandoRecuperacao> {
+class _AguardandoRecuperacaoState extends State<AguardandoRecuperacao>
+    with WidgetsBindingObserver {
+  bool _alertaExibido = false;
+
   @override
   void initState() {
     super.initState();
-    // Inicia o contador de 15 segundos assim que a tela abre
-    Future.delayed(const Duration(seconds: 15), () {
-      if (mounted) _dispararAlertaSucesso();
-    });
+    // Adiciona o observer para monitorar o ciclo de vida do app
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    // Remove o observer ao sair da tela para evitar vazamento de memória
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    // Detecta quando o usuário volta para o app vindo do navegador/link externo
+    if (state == AppLifecycleState.resumed && !_alertaExibido) {
+      _alertaExibido = true;
+      _dispararAlertaSucesso();
+    }
   }
 
   void _dispararAlertaSucesso() {
@@ -176,7 +195,7 @@ class _AguardandoRecuperacaoState extends State<AguardandoRecuperacao> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: 300,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

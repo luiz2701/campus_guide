@@ -19,10 +19,10 @@ class InstitutionalDB {
       name: 'Maria Souza',
       role: 'aluno',
     ),
-    '1231112899': _InstitutionalRecord(
-      matricula: '1231112899',
+    '1234412899': _InstitutionalRecord(
+      matricula: '1234412899',
       email: 'jodantasjunior@gmail.com',
-      name: 'José Alves',
+      name: 'José Júnior',
       role: 'aluno',
     ),
     '1231782899': _InstitutionalRecord(
@@ -31,10 +31,10 @@ class InstitutionalDB {
       name: 'José Alves',
       role: 'aluno',
     ),
-    '1234827891': _InstitutionalRecord(
-      matricula: '1234827891',
+    '1231027891': _InstitutionalRecord(
+      matricula: '1231027891',
       email: 'josealvesdantasjunior@gmail.com',
-      name: 'José Júnior',
+      name: 'José Dantas',
       role: 'aluno',
     ),
     '1222190106': _InstitutionalRecord(
