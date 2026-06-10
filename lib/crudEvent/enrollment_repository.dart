@@ -17,9 +17,14 @@ class EnrollmentRepository {
     final inscricaoRef = _col.doc(_docId(userID, eventoID));
     final eventoRef = _db.collection('eventos').doc(eventoID);
 
+    // O runTransaction garante a consistência e resolve os acessos simultâneos
     await _db.runTransaction((transaction) async {
       final inscricaoDoc = await transaction.get(inscricaoRef);
-      if (inscricaoDoc.exists) return;
+      
+      // REGRA: Usuário não pode se inscrever mais de uma vez no mesmo evento
+      if (inscricaoDoc.exists) {
+        throw Exception('Você já está inscrito neste evento.');
+      }
 
       final eventoDoc = await transaction.get(eventoRef);
       if (!eventoDoc.exists) {
@@ -30,20 +35,37 @@ class EnrollmentRepository {
       final status = data['status'] ?? EventStatus.ativo.name;
       final vagasTotal = data['vagasTotal'] ?? 0;
       final vagasOcupadas = data['vagasOcupadas'] ?? 0;
+      final Timestamp? dataInicioTimestamp = data['dataInicio'];
 
-      if (status == EventStatus.cancelado.name) {
-        throw Exception('Este evento está cancelado.');
+      // REGRA: Evento deve estar com status “Aberto” (ativo)
+      if (status != EventStatus.ativo.name) {
+        throw Exception('Este evento não está aberto para inscrições.');
       }
 
+      // REGRA: Devem existir vagas remanescentes
       if (vagasOcupadas >= vagasTotal) {
         throw Exception('Não há vagas disponíveis para este evento.');
       }
 
+      // REGRA: Inscrições podem ocorrer até 10 min antes do começo do evento
+      if (dataInicioTimestamp != null) {
+        final dataInicio = dataInicioTimestamp.toDate();
+        final dataLimiteInscricao = dataInicio.subtract(const Duration(minutes: 10));
+        
+        if (DateTime.now().isAfter(dataLimiteInscricao)) {
+          throw Exception(
+            'Inscrições encerradas. O prazo finalizou 10 minutos antes do início do evento.'
+          );
+        }
+      }
+
+      // Se passou em todas as regras, consolida a inscrição
       transaction.set(inscricaoRef, {
         'userID': userID,
         'eventoID': eventoID,
         'criadoEm': FieldValue.serverTimestamp(),
       });
+      
       transaction.update(eventoRef, {
         'vagasOcupadas': vagasOcupadas + 1,
         'atualizadoEm': Timestamp.fromDate(DateTime.now()),
