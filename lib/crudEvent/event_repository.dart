@@ -10,7 +10,8 @@ class EventRepository {
   Future<List<EventModel>> buscarTodos() async {
     final snapshot = await _col.orderBy('dataInicio').get();
     final eventos = snapshot.docs.map((doc) => EventModel.fromDoc(doc)).toList();
-    return _ordenarEventos(eventos);
+    final eventosVisiveis = eventos.where((evento) => evento.isVisivelNaListagem).toList();
+    return _ordenarEventos(eventosVisiveis);
   }
 
   Future<EventModel?> buscarPorId(String id) async {
@@ -26,7 +27,8 @@ class EventRepository {
         .map(
           (snapshot) {
             final eventos = snapshot.docs.map((doc) => EventModel.fromDoc(doc)).toList();
-            return _ordenarEventos(eventos); // eventos ordenados pela data e hora
+            final eventosVisiveis = eventos.where((evento) => evento.isVisivelNaListagem).toList();
+            return _ordenarEventos(eventosVisiveis); // eventos ordenados pela data e hora
           },
         );
   }

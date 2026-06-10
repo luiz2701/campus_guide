@@ -64,23 +64,20 @@ class EventModel {
     final agora = DateTime.now();
     // Evento ainda dentro do período de realização: sempre visível.
     if (statusEfetivo == EventStatus.ativo) return false;
-    
+
+    // Eventos encerrados já passaram e não devem ser exibidos.
+    if (statusEfetivo == EventStatus.encerrado) return true;
+
     // Cancelado: visível por 4 dias a partir de dataCancelamento.
     if (status == EventStatus.cancelado) {
       if (dataCancelamento == null) return false;
       final limiteVisibilidade = dataCancelamento!.add(const Duration(days: 4));
       return agora.isAfter(limiteVisibilidade);
     }
-    
+
     // Ocultado: sempre oculto.
     if (statusEfetivo == EventStatus.ocultado) return true;
-    
-    // Encerrado: janela de carência de 4 dias após o término.
-    if (statusEfetivo == EventStatus.encerrado) {
-      final limiteVisibilidade = dataFim.add(const Duration(days: 4));
-      return agora.isAfter(limiteVisibilidade);
-    }
-    
+
     return false;
   }
 
@@ -91,7 +88,7 @@ class EventModel {
     if (status == EventStatus.cancelado) return 'Cancelado';
     if (statusEfetivo == EventStatus.ocultado) return 'Ocultado';
     if (statusEfetivo == EventStatus.encerrado) return 'Encerrado';
-    if (vagasRestantes <= 0) return 'Esgotado';
+    if (vagasRestantes <= 0) return 'Fechado';
     return 'Disponível ($vagasRestantes vagas)';
   }
 
