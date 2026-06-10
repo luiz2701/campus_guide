@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:campus_guide/features/auth/user.dart';
+
 import 'event_model.dart';
 
 class EnrollmentRepository {
@@ -32,7 +34,9 @@ class EnrollmentRepository {
       final vagasOcupadas = data['vagasOcupadas'] ?? 0;
 
       if (status == EventStatus.cancelado.name) {
-        throw Exception('Este evento está cancelado.');
+        throw Exception(
+          'Não é possível inscrever-se: este evento foi cancelado.',
+        ); //aviso de eventos cancelados
       }
 
       if (vagasOcupadas >= vagasTotal) {
@@ -90,6 +94,28 @@ class EnrollmentRepository {
         .map((doc) => doc.data()['eventoID'] as String?)
         .whereType<String>()
         .toList();
+  }
+
+  Future<List<AppUser>> buscarUsuariosInscritosDoEvento( //avisa os inscritos no email
+    String eventoID,
+  ) async {
+    final snapshot = await _col.where('eventoID', isEqualTo: eventoID).get();
+    final usuarios = <AppUser>[];
+
+    for (final doc in snapshot.docs) {
+      final userID = doc.data()['userID'] as String?;
+      if (userID == null || userID.isEmpty) continue;
+
+      final userDoc = await _db.collection('usuarios').doc(userID).get();
+      if (!userDoc.exists) continue;
+
+      final userData = userDoc.data();
+      if (userData == null) continue;
+
+      usuarios.add(AppUser.fromMap(userDoc.id, userData));
+    }
+
+    return usuarios;
   }
 
   /// Stream em tempo real dos IDs de eventos em que [userID] está inscrito.
