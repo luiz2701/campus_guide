@@ -890,13 +890,9 @@ class _InscricaoConfirmadaDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Checkmark simples, sem círculo colorido
-              const Icon(
-                Icons.check,
-                size: 48,
-                color: Colors.black87,
-              ),
+              const Icon(Icons.check, size: 48, color: Colors.black87),
               const SizedBox(height: 16),
-        
+
               // Título
               const Text(
                 'Você está inscrito!',
@@ -908,7 +904,7 @@ class _InscricaoConfirmadaDialog extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
-        
+
               // Subtítulo
               const Text(
                 'Enviamos uma confirmação de inscrição para seu email.',
@@ -920,7 +916,7 @@ class _InscricaoConfirmadaDialog extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 28),
-        
+
               // Botão Continuar
               SizedBox(
                 width: double.infinity,
